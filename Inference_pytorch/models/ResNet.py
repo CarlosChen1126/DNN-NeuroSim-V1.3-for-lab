@@ -2,12 +2,13 @@ import torch
 import torch.nn as nn
 from modules.quantization_cpu_np_infer import QConv2d, QLinear
 from modules.floatrange_cpu_np_infer import FConv2d, FLinear
-from torchvision.models.utils import load_state_dict_from_url
-name=0
+#from torchvision.models.utils import load_state_dict_from_url
+import torch.nn.functional as F
+name = 0
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
-           'wide_resnet50_2', 'wide_resnet101_2']
+           'wide_resnet50_2', 'wide_resnet101_2', 'resnet20']
 
 
 model_urls = {
@@ -23,39 +24,39 @@ model_urls = {
 }
 
 
-def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1,args=None,logger=None):
+def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1, args=None, logger=None):
     """3x3 convolution with padding"""
     global name
-    if args.mode == "WAGE":       
-        conv2d = QConv2d(in_planes, out_planes, kernel_size=3, stride=stride, padding=dilation, 
-                     logger=logger,wl_input = args.wl_activate,wl_activate=args.wl_activate,
-                     wl_error=args.wl_error,wl_weight= args.wl_weight,inference=args.inference,onoffratio=args.onoffratio,cellBit=args.cellBit,
-                     subArray=args.subArray,ADCprecision=args.ADCprecision,vari=args.vari,t=args.t,v=args.v,detect=args.detect,target=args.target,
-                     name = 'Conv3x3'+'_'+str(name)+'_', model = args.model)
-        
+    if args.mode == "WAGE":
+        conv2d = QConv2d(in_planes, out_planes, kernel_size=3, stride=stride, padding=dilation,
+                         logger=logger, wl_input=args.wl_activate, wl_activate=args.wl_activate,
+                         wl_error=args.wl_error, wl_weight=args.wl_weight, inference=args.inference, onoffratio=args.onoffratio, cellBit=args.cellBit,
+                         subArray=args.subArray, ADCprecision=args.ADCprecision, vari=args.vari, t=args.t, v=args.v, detect=args.detect, target=args.target,
+                         name='Conv3x3'+'_'+str(name)+'_', model=args.model)
+
     elif args.mode == "FP":
         conv2d = FConv2d(in_planes, out_planes, kernel_size=3, stride=stride,
-                     padding=dilation, groups=groups, bias=False, dilation=dilation,
-                     logger=logger,wl_input = args.wl_activate,wl_weight= args.wl_weight,inference=args.inference,onoffratio=args.onoffratio,cellBit=args.cellBit,
-                     subArray=args.subArray,ADCprecision=args.ADCprecision,vari=args.vari,t=args.t,v=args.v,detect=args.detect,target=args.target, cuda=args.cuda,
-                     name = 'Conv3x3'+'_'+str(name)+'_' )
+                         padding=dilation, groups=groups, bias=False, dilation=dilation,
+                         logger=logger, wl_input=args.wl_activate, wl_weight=args.wl_weight, inference=args.inference, onoffratio=args.onoffratio, cellBit=args.cellBit,
+                         subArray=args.subArray, ADCprecision=args.ADCprecision, vari=args.vari, t=args.t, v=args.v, detect=args.detect, target=args.target, cuda=args.cuda,
+                         name='Conv3x3'+'_'+str(name)+'_')
     name += 1
     return conv2d
 
 
-def conv1x1(in_planes, out_planes, stride=1,args=None,logger=None):
+def conv1x1(in_planes, out_planes, stride=1, args=None, logger=None):
     """1x1 convolution"""
     global name
-    if args.mode == "WAGE":        
-        conv2d = QConv2d(in_planes, out_planes, kernel_size=1, stride=stride, logger=logger,wl_input = args.wl_activate,wl_activate=args.wl_activate,
-                         wl_error=args.wl_error,wl_weight= args.wl_weight,inference=args.inference,onoffratio=args.onoffratio,cellBit=args.cellBit,
-                         subArray=args.subArray,ADCprecision=args.ADCprecision,vari=args.vari,t=args.t,v=args.v,detect=args.detect,target=args.target,
-                         name = 'Conv1x1'+'_'+str(name)+'_', model = args.model)
+    if args.mode == "WAGE":
+        conv2d = QConv2d(in_planes, out_planes, kernel_size=1, stride=stride, logger=logger, wl_input=args.wl_activate, wl_activate=args.wl_activate,
+                         wl_error=args.wl_error, wl_weight=args.wl_weight, inference=args.inference, onoffratio=args.onoffratio, cellBit=args.cellBit,
+                         subArray=args.subArray, ADCprecision=args.ADCprecision, vari=args.vari, t=args.t, v=args.v, detect=args.detect, target=args.target,
+                         name='Conv1x1'+'_'+str(name)+'_', model=args.model)
     elif args.mode == "FP":
         conv2d = FConv2d(in_planes, out_planes, kernel_size=1, stride=stride, bias=False,
-                         logger=logger,wl_input = args.wl_activate,wl_weight= args.wl_weight,inference=args.inference,onoffratio=args.onoffratio,cellBit=args.cellBit,
-                         subArray=args.subArray,ADCprecision=args.ADCprecision,vari=args.vari,t=args.t,v=args.v,detect=args.detect,target=args.target, cuda=args.cuda,
-                         name = 'Conv1x1'+'_'+str(name)+'_' )
+                         logger=logger, wl_input=args.wl_activate, wl_weight=args.wl_weight, inference=args.inference, onoffratio=args.onoffratio, cellBit=args.cellBit,
+                         subArray=args.subArray, ADCprecision=args.ADCprecision, vari=args.vari, t=args.t, v=args.v, detect=args.detect, target=args.target, cuda=args.cuda,
+                         name='Conv1x1'+'_'+str(name)+'_')
     name += 1
     return conv2d
 
@@ -63,16 +64,16 @@ def conv1x1(in_planes, out_planes, stride=1,args=None,logger=None):
 def Conv2d(in_planes, out_planes, kernel_size, stride, padding, args=None, logger=None):
     """convolution"""
     global name
-    if args.mode == "WAGE":        
-        conv2d = QConv2d(in_planes, out_planes, kernel_size, stride, padding, logger=logger,wl_input = args.wl_activate,wl_activate=args.wl_activate,
-                         wl_error=args.wl_error,wl_weight= args.wl_weight,inference=args.inference,onoffratio=args.onoffratio,cellBit=args.cellBit,
-                         subArray=args.subArray,ADCprecision=args.ADCprecision,vari=args.vari,t=args.t,v=args.v,detect=args.detect,target=args.target,
-                         name = 'Conv'+'_'+str(name)+'_', model = args.model)
+    if args.mode == "WAGE":
+        conv2d = QConv2d(in_planes, out_planes, kernel_size, stride, padding, logger=logger, wl_input=args.wl_activate, wl_activate=args.wl_activate,
+                         wl_error=args.wl_error, wl_weight=args.wl_weight, inference=args.inference, onoffratio=args.onoffratio, cellBit=args.cellBit,
+                         subArray=args.subArray, ADCprecision=args.ADCprecision, vari=args.vari, t=args.t, v=args.v, detect=args.detect, target=args.target,
+                         name='Conv'+'_'+str(name)+'_', model=args.model)
     elif args.mode == "FP":
         conv2d = FConv2d(in_planes, out_planes, kernel_size, stride, padding, bias=False,
-                         logger=logger,wl_input = args.wl_activate,wl_weight= args.wl_weight,inference=args.inference,onoffratio=args.onoffratio,cellBit=args.cellBit,
-                         subArray=args.subArray,ADCprecision=args.ADCprecision,vari=args.vari,t=args.t,v=args.v,detect=args.detect,target=args.target, cuda=args.cuda,
-                         name = 'Conv'+'_'+str(name)+'_' )
+                         logger=logger, wl_input=args.wl_activate, wl_weight=args.wl_weight, inference=args.inference, onoffratio=args.onoffratio, cellBit=args.cellBit,
+                         subArray=args.subArray, ADCprecision=args.ADCprecision, vari=args.vari, t=args.t, v=args.v, detect=args.detect, target=args.target, cuda=args.cuda,
+                         name='Conv'+'_'+str(name)+'_')
     name += 1
     return conv2d
 
@@ -81,20 +82,20 @@ def Linear(in_planes, out_planes, args=None, logger=None):
     """convolution"""
     global name
     if args.mode == "WAGE":
-        linear = QLinear(in_planes, out_planes, 
-                        logger=logger, wl_input = args.wl_activate,wl_activate=args.wl_activate,wl_error=args.wl_error,
-                        wl_weight=args.wl_weight,inference=args.inference,onoffratio=args.onoffratio,cellBit=args.cellBit,
-                        subArray=args.subArray,ADCprecision=args.ADCprecision,vari=args.vari,t=args.t,v=args.v,detect=args.detect,target=args.target, 
-                        name='FC'+'_'+str(name)+'_', model = args.model)
+        linear = QLinear(in_planes, out_planes,
+                         logger=logger, wl_input=args.wl_activate, wl_activate=args.wl_activate, wl_error=args.wl_error,
+                         wl_weight=args.wl_weight, inference=args.inference, onoffratio=args.onoffratio, cellBit=args.cellBit,
+                         subArray=args.subArray, ADCprecision=args.ADCprecision, vari=args.vari, t=args.t, v=args.v, detect=args.detect, target=args.target,
+                         name='FC'+'_'+str(name)+'_', model=args.model)
     elif args.mode == "FP":
         linear = FLinear(in_planes, out_planes, bias=False,
-                         logger=logger,wl_input = args.wl_activate,wl_weight= args.wl_weight,inference=args.inference,onoffratio=args.onoffratio,cellBit=args.cellBit,
-                         subArray=args.subArray,ADCprecision=args.ADCprecision,vari=args.vari,t=args.t,v=args.v,detect=args.detect,target=args.target, cuda=args.cuda,
+                         logger=logger, wl_input=args.wl_activate, wl_weight=args.wl_weight, inference=args.inference, onoffratio=args.onoffratio, cellBit=args.cellBit,
+                         subArray=args.subArray, ADCprecision=args.ADCprecision, vari=args.vari, t=args.t, v=args.v, detect=args.detect, target=args.target, cuda=args.cuda,
                          name='FC'+'_'+str(name)+'_')
     name += 1
     return linear
-    
-    
+
+
 class BasicBlock(nn.Module):
     expansion = 1
 
@@ -104,14 +105,17 @@ class BasicBlock(nn.Module):
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         if groups != 1 or base_width != 64:
-            raise ValueError('BasicBlock only supports groups=1 and base_width=64')
+            raise ValueError(
+                'BasicBlock only supports groups=1 and base_width=64')
         if dilation > 1:
-            raise NotImplementedError("Dilation > 1 not supported in BasicBlock")
+            raise NotImplementedError(
+                "Dilation > 1 not supported in BasicBlock")
         # Both self.conv1 and self.downsample layers downsample the input when stride != 1
-        self.conv1 = conv3x3(inplanes, planes, stride,args=args,logger=logger)
+        self.conv1 = conv3x3(inplanes, planes, stride,
+                             args=args, logger=logger)
         self.bn1 = norm_layer(planes)
         self.relu = nn.ReLU(inplace=True)
-        self.conv2 = conv3x3(planes, planes,args=args,logger=logger)
+        self.conv2 = conv3x3(planes, planes, args=args, logger=logger)
         self.bn2 = norm_layer(planes)
         self.downsample = downsample
         self.stride = stride
@@ -146,11 +150,13 @@ class Bottleneck(nn.Module):
             norm_layer = nn.BatchNorm2d
         width = int(planes * (base_width / 64.)) * groups
         # Both self.conv2 and self.downsample layers downsample the input when stride != 1
-        self.conv1 = conv1x1(inplanes, width,args=args,logger=logger)
+        self.conv1 = conv1x1(inplanes, width, args=args, logger=logger)
         self.bn1 = norm_layer(width)
-        self.conv2 = conv3x3(width, width, stride, groups, dilation,args=args,logger=logger)
+        self.conv2 = conv3x3(width, width, stride, groups,
+                             dilation, args=args, logger=logger)
         self.bn2 = norm_layer(width)
-        self.conv3 = conv1x1(width, planes * self.expansion,args=args,logger=logger)
+        self.conv3 = conv1x1(width, planes * self.expansion,
+                             args=args, logger=logger)
         self.bn3 = norm_layer(planes * self.expansion)
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
@@ -179,6 +185,92 @@ class Bottleneck(nn.Module):
         return out
 
 
+class LambdaLayer(nn.Module):
+    def __init__(self, lambd):
+        super(LambdaLayer, self).__init__()
+        self.lambd = lambd
+
+    def forward(self, x):
+        return self.lambd(x)
+
+
+class BasicBlock_CIFAR(nn.Module):
+    expansion = 1
+
+    def __init__(self, in_planes, planes, args, stride=1, **kwargs):
+        super(BasicBlock_CIFAR, self).__init__()
+        self.conv1 = conv3x3(in_planes, planes, stride=stride, args=args)
+        self.bn1 = nn.BatchNorm2d(planes)
+        self.conv2 = conv3x3(planes, planes, stride=1, args=args)
+        self.bn2 = nn.BatchNorm2d(planes)
+        self.relu = nn.ReLU()
+
+        self.shortcut = nn.Sequential()
+
+        option = 'A'
+        if stride != 1 or in_planes != planes:
+            if option == 'A':
+                """
+                For CIFAR10 ResNet paper uses option A.
+                """
+                self.shortcut = LambdaLayer(lambda x:
+                                            F.pad(x[:, :, ::2, ::2], (0, 0, 0, 0, planes//4, planes//4), "constant", 0))
+            elif option == 'B':
+                self.shortcut = nn.Sequential(
+                    q.QuantizedConv2d_XBAR(in_planes, self.expansion * planes,
+                                           kernel_size=1, stride=stride, bias=False,
+                                           wbits=kwargs['wbits'], abits=kwargs['abits']),
+                    nn.BatchNorm2d(self.expansion * planes)
+                )
+
+    def forward(self, x):
+        out = self.relu(self.bn1(self.conv1(x)))
+        out = self.bn2(self.conv2(out))
+        out += self.shortcut(x)
+        out = self.relu(out)
+        return out
+
+
+class ResNet_CIFAR(nn.Module):
+    def __init__(self, block, num_blocks, args, logger, **kwargs):
+        super(ResNet_CIFAR, self).__init__()
+        self.in_planes = 16
+
+        self.conv1 = Conv2d(3, 16, kernel_size=3, stride=1,
+                            padding=1, args=args, logger=logger)
+        self.bn1 = nn.BatchNorm2d(16)
+        self.layer1 = self._make_layer(
+            block, 16, num_blocks[0], args=args, stride=1, **kwargs)
+        self.layer2 = self._make_layer(
+            block, 32, num_blocks[1], args=args, stride=2, **kwargs)
+        self.layer3 = self._make_layer(
+            block, 64, num_blocks[2], args=args, stride=2, **kwargs)
+        self.linear = Linear(64, 10, args, logger)
+        self.relu = nn.ReLU()
+
+        # self.apply(_weights_init)
+
+    def _make_layer(self, block, planes, num_blocks, args, stride, **kwargs):
+        strides = [stride] + [1]*(num_blocks-1)
+        layers = []
+        for stride in strides:
+            layers.append(
+                block(self.in_planes, planes, args, stride, **kwargs))
+            self.in_planes = planes * block.expansion
+
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        out = self.relu(self.bn1(self.conv1(x)))
+        out = self.layer1(out)
+        out = self.layer2(out)
+        out = self.layer3(out)
+        out = F.avg_pool2d(out, int(out.size()[3]))
+        out = out.view(out.size(0), -1)
+        out = self.linear(out)
+        return out
+
+
 class ResNet(nn.Module):
 
     def __init__(self, block, layers, args, logger, num_classes=1000, zero_init_residual=False,
@@ -200,7 +292,8 @@ class ResNet(nn.Module):
                              "or a 3-element tuple, got {}".format(replace_stride_with_dilation))
         self.groups = groups
         self.base_width = width_per_group
-        self.conv1 = Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3, args=args, logger=logger)
+        self.conv1 = Conv2d(3, self.inplanes, kernel_size=7,
+                            stride=2, padding=3, args=args, logger=logger)
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
@@ -216,7 +309,8 @@ class ResNet(nn.Module):
 
         for m in self.modules():
             if isinstance(m, (nn.Conv2d, QConv2d)):
-                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                nn.init.kaiming_normal_(
+                    m.weight, mode='fan_out', nonlinearity='relu')
             elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
@@ -238,20 +332,21 @@ class ResNet(nn.Module):
         if dilate:
             self.dilation *= stride
             stride = 1
-        if stride != 1 or self.inplanes != planes * block.expansion:           
+        if stride != 1 or self.inplanes != planes * block.expansion:
             downsample = nn.Sequential(
-                conv1x1(self.inplanes, planes * block.expansion, stride, args, logger),
+                conv1x1(self.inplanes, planes *
+                        block.expansion, stride, args, logger),
                 norm_layer(planes * block.expansion),
             )
 
         layers = []
         layers.append(block(self.inplanes, planes, stride, downsample, self.groups,
-                            self.base_width, previous_dilation, norm_layer,args,logger))
+                            self.base_width, previous_dilation, norm_layer, args, logger))
         self.inplanes = planes * block.expansion
         for _ in range(1, blocks):
             layers.append(block(self.inplanes, planes, groups=self.groups,
                                 base_width=self.base_width, dilation=self.dilation,
-                                norm_layer=norm_layer,args=args,logger=logger))
+                                norm_layer=norm_layer, args=args, logger=logger))
 
         return nn.Sequential(*layers)
 
@@ -260,7 +355,6 @@ class ResNet(nn.Module):
         x = self.bn1(x)
         x = self.relu(x)
         x = self.maxpool(x)
-        
 
         x = self.layer1(x)
         x = self.layer2(x)
@@ -276,13 +370,18 @@ class ResNet(nn.Module):
 
 def _resnet(arch, block, layers, pretrained=None, progress=True, args=None, logger=None, **kwargs):
     model = ResNet(block, layers, args, logger, **kwargs)
-    if pretrained==True:
+    if pretrained == True:
         state_dict = load_state_dict_from_url(model_urls[arch],
                                               progress=progress)
         model.load_state_dict(state_dict, strict=False)
     elif pretrained is not None:
         model.load_state_dict(torch.load(pretrained))
     return model
+
+
+def resnet20(pretrained=None, progress=True, args=None, logger=None, **kwargs):
+
+    return ResNet_CIFAR(BasicBlock_CIFAR, [3, 3, 3], args, logger, **kwargs)
 
 
 def resnet18(pretrained=None, progress=True, args=None, logger=None, **kwargs):

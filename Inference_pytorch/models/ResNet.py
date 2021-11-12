@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from modules.quantization_cpu_np_infer import QConv2d, QLinear
 from modules.floatrange_cpu_np_infer import FConv2d, FLinear
-#from torchvision.models.utils import load_state_dict_from_url
+from torchvision.models.utils import load_state_dict_from_url
 import torch.nn.functional as F
 name = 0
 
@@ -352,6 +352,7 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
+        print("=================resnet18==========================")
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)

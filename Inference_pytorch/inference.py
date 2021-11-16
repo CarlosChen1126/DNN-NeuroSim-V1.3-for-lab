@@ -118,9 +118,15 @@ elif args.model == 'ResNet18':
     modelCF = ResNet.resnet18(args=args, logger=logger, pretrained=True)
 elif args.model == 'ResNet20':
     from models import ResNet
+<<<<<<< HEAD
     model_path = './log/default/ADCprecision=5/batch_size=64/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=0/lr=0.01/mode=FP/model=ResNet20/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8/latest.pth'
     modelCF = ResNet.resnet20(args=args, logger=logger, pretrained=model_path)
     modelCF.load_state_dict(torch.load(pretrained))
+=======
+    model_path='./log/default/ADCprecision=5/batch_size=64/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=1/lr=0.01/mode=FP/model=ResNet20/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8/latest.pth'
+    modelCF = ResNet.resnet20(args=args, logger=logger, pretrained=model_path)
+    modelCF.load_state_dict(torch.load(model_path))
+>>>>>>> 7fa7d7f64e7c5149b907e77bf36f85a167fb266b
 else:
     raise ValueError("Unknown model type")
 
@@ -176,6 +182,11 @@ if args.inference:
     print("variation: ")
     print(args.vari)
 
+print('Test set: ')
+print('avg loss: ')
+print(test_loss.item())
+print('accuracy: ')
+print(acc.item())
 logger('Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)'.format(
     test_loss, correct, len(test_loader.dataset), acc))
 

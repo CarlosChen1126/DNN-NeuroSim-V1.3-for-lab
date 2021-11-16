@@ -261,7 +261,7 @@ class ResNet_CIFAR(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        print("=======================ResNet20 OK===========================")
+        #print("=======================ResNet20 OK===========================")
         out = self.relu(self.bn1(self.conv1(x)))
         out = self.layer1(out)
         out = self.layer2(out)
@@ -352,7 +352,7 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        print("=================resnet18==========================")
+        #print("=================resnet18==========================")
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)

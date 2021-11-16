@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from utee import wage_initializer,wage_quantizer,float_quantizer
-from torch._jit_internal import weak_script_method
+#from torch._jit_internal import weak_script_method
 import numpy as np
 
 class FConv2d(nn.Conv2d):
@@ -26,18 +26,18 @@ class FConv2d(nn.Conv2d):
         self.cuda = cuda
         self.name = name
         
-    @weak_script_method    
-    def forward(self, input):  
-        if self.inference == 1:
-            weight = float_quantizer.float_range_quantize(self.weight,self.wl_weight)
-            weight = wage_quantizer.Retention(weight,self.t,self.v,self.detect,self.target)
-            input = float_quantizer.float_range_quantize(input,self.wl_input)
-            output= F.conv2d(input, weight, self.bias, self.stride, self.padding, self.dilation, self.groups)
-            output = wage_quantizer.LinearQuantizeOut(output, self.ADCprecision)
-        else:
-            output= F.conv2d(input, self.weight, self.bias, self.stride, self.padding, self.dilation, self.groups)        
+#    @weak_script_method    
+#    def forward(self, input):  
+#        if self.inference == 1:
+#            weight = float_quantizer.float_range_quantize(self.weight,self.wl_weight)
+#            weight = wage_quantizer.Retention(weight,self.t,self.v,self.detect,self.target)
+#            input = float_quantizer.float_range_quantize(input,self.wl_input)
+#            output= F.conv2d(input, weight, self.bias, self.stride, self.padding, self.dilation, self.groups)
+#            output = wage_quantizer.LinearQuantizeOut(output, self.ADCprecision)
+#        else:
+#            output= F.conv2d(input, self.weight, self.bias, self.stride, self.padding, self.dilation, self.groups)        
 
-        return output
+#        return output
 
 
 class FLinear(nn.Linear):
@@ -61,15 +61,15 @@ class FLinear(nn.Linear):
         self.cuda = cuda
         self.name = name
 
-    @weak_script_method
-    def forward(self, input):
-        if self.inference == 1:
-            weight = float_quantizer.float_range_quantize(self.weight,self.wl_weight)
-            weight = wage_quantizer.Retention(weight,self.t,self.v,self.detect,self.target)
-            input = float_quantizer.float_range_quantize(input,self.wl_input)
-            output= F.linear(input, self.weight, self.bias)
-            output = wage_quantizer.LinearQuantizeOut(output, self.ADCprecision)
-        else:
-            output= F.linear(input, self.weight, self.bias)
-        return output
+#    @weak_script_method
+#    def forward(self, input):
+#        if self.inference == 1:
+#            weight = float_quantizer.float_range_quantize(self.weight,self.wl_weight)
+#            weight = wage_quantizer.Retention(weight,self.t,self.v,self.detect,self.target)
+#            input = float_quantizer.float_range_quantize(input,self.wl_input)
+#            output= F.linear(input, self.weight, self.bias)
+#            output = wage_quantizer.LinearQuantizeOut(output, self.ADCprecision)
+#        else:
+#            output= F.linear(input, self.weight, self.bias)
+#        return output
 

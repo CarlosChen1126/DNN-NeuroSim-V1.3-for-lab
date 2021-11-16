@@ -1,0 +1,43 @@
+=================FLAGS==================
+dataset: cifar10
+model: ResNet20
+mode: FP
+batch_size: 64
+epochs: 200
+grad_scale: 8
+seed: 117
+log_interval: 100
+test_interval: 1
+logdir: log/default/ADCprecision=5/batch_size=64/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=0/lr=0.01/mode=FP/model=ResNet20/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8
+lr: 0.01
+decreasing_lr: 140,180
+wl_weight: 8
+wl_grad: 8
+wl_activate: 8
+wl_error: 8
+inference: 0
+subArray: 128
+ADCprecision: 5
+cellBit: 4
+onoffratio: 10
+vari: 0
+t: 0
+v: 0
+detect: 0
+target: 0
+========================================
+decreasing_lr: [140, 180]
+training phase
+Train Epoch: 0 [6400/50000] Loss: 1.799674 Acc: 0.2812 lr: 1.00e-02
+Train Epoch: 0 [12800/50000] Loss: 1.721075 Acc: 0.3594 lr: 1.00e-02
+Train Epoch: 0 [19200/50000] Loss: 1.654134 Acc: 0.4219 lr: 1.00e-02
+Train Epoch: 0 [25600/50000] Loss: 1.558571 Acc: 0.4375 lr: 1.00e-02
+Train Epoch: 0 [32000/50000] Loss: 1.383930 Acc: 0.4688 lr: 1.00e-02
+Train Epoch: 0 [38400/50000] Loss: 1.073711 Acc: 0.5781 lr: 1.00e-02
+Train Epoch: 0 [44800/50000] Loss: 1.321433 Acc: 0.5938 lr: 1.00e-02
+Elapsed 11.31s, 11.31 s/epoch, 0.01 s/batch, ets 2250.80s
+testing phase
+	Epoch 0 Test set: Average loss: 1.4100, Accuracy: 5366/10000 (54%)
+Saving model to /home/b08901048/DNN-NeuroSim-V1.3-for-lab/Inference_pytorch/log/default/ADCprecision=5/batch_size=64/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=0/lr=0.01/mode=FP/model=ResNet20/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8/best-0.pth
+training phase
+Total Elapse: 13.81, Best Result: 53.660%

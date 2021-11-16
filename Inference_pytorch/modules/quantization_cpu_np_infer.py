@@ -39,7 +39,7 @@ class QConv2d(nn.Conv2d):
             self.weight, self.wl_weight, factor=1.0)
 
     # @weak_script_method
-    # def forward(self, input):
+    def forward(self, input):
 
         weight1 = self.weight * self.scale + \
             (self.weight - self.weight * self.scale).detach()
@@ -273,7 +273,7 @@ class QLinear(nn.Linear):
             self.weight, self.wl_weight, factor=1.0)
 
     # @weak_script_method
-    # def forward(self, input):
+    def forward(self, input):
 
         weight1 = self.weight * self.scale + \
             (self.weight - self.weight * self.scale).detach()

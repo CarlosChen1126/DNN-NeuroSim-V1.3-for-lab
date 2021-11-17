@@ -112,7 +112,7 @@ elif args.model == 'ResNet18':
 elif args.model == 'ResNet20':
     from models import ResNet
     model = ResNet.resnet20(args=args, logger=logger)
-    criterion = torch.nn.CrossEntropyLoss()
+    criterion = wage_util.SSE()
 else:
     raise ValueError("Unknown model type")
 

@@ -1,0 +1,881 @@
+log/default/ADCprecision=5/batch_size=500/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=1/lr=0.01/mode=WAGE/model=ResNet20/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8
+Building CIFAR-10 data loader with 1 workers
+Files already downloaded and verified
+Files already downloaded and verified
+fan_in     27, float_limit 0.333333, float std 0.272166, quant limit 1.5, scale 4
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    576, float_limit 0.072169, float std 0.058926, quant limit 1.5, scale 16
+fan_in    576, float_limit 0.072169, float std 0.058926, quant limit 1.5, scale 16
+fan_in    576, float_limit 0.072169, float std 0.058926, quant limit 1.5, scale 16
+fan_in    576, float_limit 0.072169, float std 0.058926, quant limit 1.5, scale 16
+fan_in    576, float_limit 0.072169, float std 0.058926, quant limit 1.5, scale 16
+fan_in     64, float_limit 0.216506, float std 0.176777, quant limit 1.5, scale 8
+------------------------------ FloorPlan --------------------------------
+
+Tile and PE size are optimized to maximize memory utilization ( = memory mapped by synapse / total memory on chip)
+
+Desired Conventional Mapped Tile Storage Size: 64x64
+Desired Conventional PE Storage Size: 32x32
+Desired Novel Mapped Tile Storage Size: 9x32x32
+User-defined SubArray Size: 8x8
+
+----------------- # of tile used for each layer -----------------
+layer1: 2
+layer2: 2
+layer3: 2
+layer4: 2
+layer5: 2
+layer6: 2
+layer7: 2
+layer8: 4
+layer9: 4
+layer10: 4
+layer11: 4
+layer12: 4
+layer13: 4
+layer14: 8
+layer15: 16
+layer16: 16
+layer17: 16
+layer18: 16
+layer19: 16
+layer20: 1
+
+----------------- Speed-up of each layer ------------------
+layer1: 4
+layer2: 2
+layer3: 2
+layer4: 2
+layer5: 2
+layer6: 2
+layer7: 2
+layer8: 2
+layer9: 1
+layer10: 1
+layer11: 1
+layer12: 1
+layer13: 1
+layer14: 1
+layer15: 1
+layer16: 1
+layer17: 1
+layer18: 1
+layer19: 1
+layer20: 1
+
+----------------- Utilization of each layer ------------------
+layer1: 0.375
+layer2: 1
+layer3: 1
+layer4: 1
+layer5: 1
+layer6: 1
+layer7: 1
+layer8: 1
+layer9: 1
+layer10: 1
+layer11: 1
+layer12: 1
+layer13: 1
+layer14: 1
+layer15: 1
+layer16: 1
+layer17: 1
+layer18: 1
+layer19: 1
+layer20: 0.625
+Memory Utilization of Whole Chip: 98.7205 % 
+
+---------------------------- FloorPlan Done ------------------------------
+
+
+
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+-------------------------------------- Hardware Performance --------------------------------------
+-------------------- Estimation of Layer 1 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer1's readLatency is: -nanns
+layer1's readDynamicEnergy is: -nanpJ
+layer1's leakagePower is: 3.93444uW
+layer1's leakageEnergy is: -nanpJ
+layer1's buffer latency is: 26349.7ns
+layer1's buffer readDynamicEnergy is: 15147.1pJ
+layer1's ic latency is: -nanns
+layer1's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 25251.7ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 56816.3ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 266172pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 177561pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 2 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer2's readLatency is: -nanns
+layer2's readDynamicEnergy is: -nanpJ
+layer2's leakagePower is: 4.10838uW
+layer2's leakageEnergy is: -nanpJ
+layer2's buffer latency is: 75224ns
+layer2's buffer readDynamicEnergy is: 28120.5pJ
+layer2's ic latency is: -nanns
+layer2's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 50503.4ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 91537.3ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 354394pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 352635pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 3 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer3's readLatency is: -nanns
+layer3's readDynamicEnergy is: -nanpJ
+layer3's leakagePower is: 4.10838uW
+layer3's leakageEnergy is: -nanpJ
+layer3's buffer latency is: 75224ns
+layer3's buffer readDynamicEnergy is: 28120.5pJ
+layer3's ic latency is: -nanns
+layer3's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 50503.4ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 91537.3ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 365471pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 352635pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 4 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer4's readLatency is: -nanns
+layer4's readDynamicEnergy is: -nanpJ
+layer4's leakagePower is: 4.10838uW
+layer4's leakageEnergy is: -nanpJ
+layer4's buffer latency is: 75224ns
+layer4's buffer readDynamicEnergy is: 28120.5pJ
+layer4's ic latency is: -nanns
+layer4's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 50503.4ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 91537.3ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 486767pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 352635pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 5 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer5's readLatency is: -nanns
+layer5's readDynamicEnergy is: -nanpJ
+layer5's leakagePower is: 4.10838uW
+layer5's leakageEnergy is: -nanpJ
+layer5's buffer latency is: 75224ns
+layer5's buffer readDynamicEnergy is: 28120.5pJ
+layer5's ic latency is: -nanns
+layer5's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 50503.4ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 91537.3ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 320777pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 352635pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 6 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer6's readLatency is: -nanns
+layer6's readDynamicEnergy is: -nanpJ
+layer6's leakagePower is: 4.10838uW
+layer6's leakageEnergy is: -nanpJ
+layer6's buffer latency is: 75224ns
+layer6's buffer readDynamicEnergy is: 28120.5pJ
+layer6's ic latency is: -nanns
+layer6's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 50503.4ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 91537.3ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 494283pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 352635pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 7 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer7's readLatency is: -nanns
+layer7's readDynamicEnergy is: -nanpJ
+layer7's leakagePower is: 4.10838uW
+layer7's leakageEnergy is: -nanpJ
+layer7's buffer latency is: 75224ns
+layer7's buffer readDynamicEnergy is: 28120.5pJ
+layer7's ic latency is: -nanns
+layer7's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 50503.4ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 91537.3ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 368782pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 352635pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 8 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer8's readLatency is: -nanns
+layer8's readDynamicEnergy is: -nanpJ
+layer8's leakagePower is: 8.21677uW
+layer8's leakageEnergy is: -nanpJ
+layer8's buffer latency is: 14071.1ns
+layer8's buffer readDynamicEnergy is: 13615.4pJ
+layer8's ic latency is: -nanns
+layer8's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 12625.8ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 22884.3ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 258790pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 176317pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 9 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer9's readLatency is: -nanns
+layer9's readDynamicEnergy is: -nanpJ
+layer9's leakagePower is: 8.93189uW
+layer9's leakageEnergy is: -nanpJ
+layer9's buffer latency is: 22381ns
+layer9's buffer readDynamicEnergy is: 18426pJ
+layer9's ic latency is: -nanns
+layer9's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 21997ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 35745.2ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 388650pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 306161pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 10 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer10's readLatency is: -nanns
+layer10's readDynamicEnergy is: -nanpJ
+layer10's leakagePower is: 8.93189uW
+layer10's leakageEnergy is: -nanpJ
+layer10's buffer latency is: 22381ns
+layer10's buffer readDynamicEnergy is: 18426pJ
+layer10's ic latency is: -nanns
+layer10's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 21997ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 35745.2ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 398589pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 306161pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 11 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer11's readLatency is: -nanns
+layer11's readDynamicEnergy is: -nanpJ
+layer11's leakagePower is: 8.93189uW
+layer11's leakageEnergy is: -nanpJ
+layer11's buffer latency is: 22381ns
+layer11's buffer readDynamicEnergy is: 18426pJ
+layer11's ic latency is: -nanns
+layer11's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 21997ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 35745.2ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 302090pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 306161pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 12 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer12's readLatency is: -nanns
+layer12's readDynamicEnergy is: -nanpJ
+layer12's leakagePower is: 8.93189uW
+layer12's leakageEnergy is: -nanpJ
+layer12's buffer latency is: 22381ns
+layer12's buffer readDynamicEnergy is: 18426pJ
+layer12's ic latency is: -nanns
+layer12's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 21997ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 35745.2ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 399333pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 306161pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 13 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer13's readLatency is: -nanns
+layer13's readDynamicEnergy is: -nanpJ
+layer13's leakagePower is: 8.93189uW
+layer13's leakageEnergy is: -nanpJ
+layer13's buffer latency is: 22381ns
+layer13's buffer readDynamicEnergy is: 18426pJ
+layer13's ic latency is: -nanns
+layer13's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 21997ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 35745.2ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 321355pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 306161pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 14 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer14's readLatency is: -nanns
+layer14's readDynamicEnergy is: -nanpJ
+layer14's leakagePower is: 17.8638uW
+layer14's leakageEnergy is: -nanpJ
+layer14's buffer latency is: 4563.71ns
+layer14's buffer readDynamicEnergy is: 9017.91pJ
+layer14's ic latency is: -nanns
+layer14's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 5499.25ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 8936.29ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 217627pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 153080pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 15 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer15's readLatency is: -nanns
+layer15's readDynamicEnergy is: -nanpJ
+layer15's leakagePower is: 35.7276uW
+layer15's leakageEnergy is: -nanpJ
+layer15's buffer latency is: 3099.41ns
+layer15's buffer readDynamicEnergy is: 13230.3pJ
+layer15's ic latency is: -nanns
+layer15's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 4040.27ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 11952.5ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 259942pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 225367pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 16 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer16's readLatency is: -nanns
+layer16's readDynamicEnergy is: -nanpJ
+layer16's leakagePower is: 35.7276uW
+layer16's leakageEnergy is: -nanpJ
+layer16's buffer latency is: 3099.41ns
+layer16's buffer readDynamicEnergy is: 13230.3pJ
+layer16's ic latency is: -nanns
+layer16's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 4040.27ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 11952.5ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 265112pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 225367pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 17 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer17's readLatency is: -nanns
+layer17's readDynamicEnergy is: -nanpJ
+layer17's leakagePower is: 35.7276uW
+layer17's leakageEnergy is: -nanpJ
+layer17's buffer latency is: 3099.41ns
+layer17's buffer readDynamicEnergy is: 13230.3pJ
+layer17's ic latency is: -nanns
+layer17's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 4040.27ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 11952.5ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 311850pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 225367pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 18 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer18's readLatency is: -nanns
+layer18's readDynamicEnergy is: -nanpJ
+layer18's leakagePower is: 35.7276uW
+layer18's leakageEnergy is: -nanpJ
+layer18's buffer latency is: 3099.41ns
+layer18's buffer readDynamicEnergy is: 13230.3pJ
+layer18's ic latency is: -nanns
+layer18's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 4040.27ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 11952.5ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 256627pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 225367pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 19 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer19's readLatency is: -nanns
+layer19's readDynamicEnergy is: -nanpJ
+layer19's leakagePower is: 35.7276uW
+layer19's leakageEnergy is: -nanpJ
+layer19's buffer latency is: 2910.02ns
+layer19's buffer readDynamicEnergy is: 13221pJ
+layer19's ic latency is: -nanns
+layer19's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 4040.27ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 11952.5ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 249807pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 225367pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 20 ----------------------
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+[Adder] Error: A single adder width is even larger than the assigned width ! 
+layer20's readLatency is: -nanns
+layer20's readDynamicEnergy is: -nanpJ
+layer20's leakagePower is: 0.89446uW
+layer20's leakageEnergy is: -nanpJ
+layer20's buffer latency is: 278.684ns
+layer20's buffer readDynamicEnergy is: 13.4064pJ
+layer20's ic latency is: -nanns
+layer20's ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 112.23ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 161.33ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 169.587pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 108.497pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+------------------------------ Summary --------------------------------
+
+ChipArea : -nanum^2
+Chip total CIM array : 27072.5um^2
+Total IC Area on chip (Global and Tile/PE local): -nanum^2
+Total ADC (or S/As and precharger for SRAM) Area on chip : 4.1062e+06um^2
+Total Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) on chip : -nanum^2
+Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, pooling and activation units) : -2.80821e+10um^2
+
+Chip clock period is: 1.75359ns
+Chip layer-by-layer readLatency (per image) is: -nanns
+Chip total readDynamicEnergy is: -nanpJ
+Chip total leakage Energy is: -nanpJ
+Chip total leakage Power is: 278.857uW
+Chip buffer readLatency is: 623820ns
+Chip buffer readDynamicEnergy is: 364789pJ
+Chip ic readLatency is: -nanns
+Chip ic readDynamicEnergy is: -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 476696ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 876510ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : -nanns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 6.28659e+06pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 5.28051e+06pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : -nanpJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+
+----------------------------- Performance -------------------------------
+Energy Efficiency TOPS/W (Layer-by-Layer Process): -nan
+Throughput TOPS (Layer-by-Layer Process): -nan
+Throughput FPS (Layer-by-Layer Process): -nan
+Compute efficiency TOPS/mm^2 (Layer-by-Layer Process): -nan
+-------------------------------------- Hardware Performance Done --------------------------------------
+
+------------------------------ Simulation Performance --------------------------------
+Total Run-time of NeuroSim: 138 seconds
+------------------------------ Simulation Performance --------------------------------
+quantize layer  Conv_0_
+input_shape = (500, 3, 32, 32)
+quantize layer  Conv3x3_1_
+input_shape = (500, 16, 32, 32)
+quantize layer  Conv3x3_2_
+input_shape = (500, 16, 32, 32)
+quantize layer  Conv3x3_3_
+input_shape = (500, 16, 32, 32)
+quantize layer  Conv3x3_4_
+input_shape = (500, 16, 32, 32)
+quantize layer  Conv3x3_5_
+input_shape = (500, 16, 32, 32)
+quantize layer  Conv3x3_6_
+input_shape = (500, 16, 32, 32)
+quantize layer  Conv3x3_7_
+input_shape = (500, 16, 32, 32)
+quantize layer  Conv3x3_8_
+input_shape = (500, 32, 16, 16)
+quantize layer  Conv3x3_9_
+input_shape = (500, 32, 16, 16)
+quantize layer  Conv3x3_10_
+input_shape = (500, 32, 16, 16)
+quantize layer  Conv3x3_11_
+input_shape = (500, 32, 16, 16)
+quantize layer  Conv3x3_12_
+input_shape = (500, 32, 16, 16)
+quantize layer  Conv3x3_13_
+input_shape = (500, 32, 16, 16)
+quantize layer  Conv3x3_14_
+input_shape = (500, 64, 8, 8)
+quantize layer  Conv3x3_15_
+input_shape = (500, 64, 8, 8)
+quantize layer  Conv3x3_16_
+input_shape = (500, 64, 8, 8)
+quantize layer  Conv3x3_17_
+input_shape = (500, 64, 8, 8)
+quantize layer  Conv3x3_18_
+input_shape = (500, 64, 8, 8)
+quantize layer  FC_19_
+ --- Hardware Properties --- 
+subArray size: 
+128
+ADC precision: 
+5
+cell precision: 
+4
+on/off ratio: 
+10
+variation: 
+0
+Test set: 
+avg loss: 
+2.1815545558929443
+accuracy: 
+26.969999313354492

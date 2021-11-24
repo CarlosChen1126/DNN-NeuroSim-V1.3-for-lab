@@ -47,7 +47,7 @@ parser.add_argument('--wl_error', default=8)
 parser.add_argument('--inference', default=0,
                     help='run hardware inference simulation',type=int)
 parser.add_argument('--subArray', default=128,
-                    help='size of subArray (e.g. 128*128)')
+                    help='size of subArray (e.g. 128*128)', type=int)
 parser.add_argument('--ADCprecision', default=5,
                     help='ADC precision (e.g. 5-bit)')
 parser.add_argument('--cellBit', default=4,

@@ -137,10 +137,10 @@ Param::Param() {
 										// NOTE: Carefully choose this number!!!
 										// e.g. when use pipeline with high speedUpDegree, i.e. high throughput, need to increase the global bus width (interface of global buffer) --> guarantee global buffer speed
 
-	numRowSubArray = 128;               // # of rows in single subArray
-	numColSubArray = 128;               // # of columns in single subArray
-	//numRowSubArray = 2;               // # of rows in single subArray
-        //numColSubArray = 2;               // # of columns in single subArray
+	//numRowSubArray = 128;               // # of rows in single subArray
+	//numColSubArray = 128;               // # of columns in single subArray
+	numRowSubArray = 32;               // # of rows in single subArray
+        numColSubArray = 32;               // # of columns in single subArray
 	/*** option to relax subArray layout ***/
 	relaxArrayCellHeight = 0;           // relax ArrayCellHeight or not
 	relaxArrayCellWidth = 0;            // relax ArrayCellWidth or not

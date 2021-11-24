@@ -59,7 +59,7 @@ def stretch_input(input_matrix,window_size = 5,padding=(0,0),stride=(1,1)):
 
     #item_num = ((input_shape[2] + 2*padding[0] - window_size) / stride[0] + 1) * ((input_shape[3] + 2*padding[1] - window_size) / stride[1] + 1)
     item_num = int((input_shape[2] + 2*padding[0] - window_size) / stride[0] + 1) * int((input_shape[3] + 2*padding[1] - window_size) / stride[1] + 1)
-    #print('item_num = {}'.format(item_num))
+   # print('item_num = {}'.format(item_num))
     output_matrix = np.zeros((input_shape[0],int(item_num),input_shape[1]*window_size*window_size))
     iter = 0
     for i in range(0, input_shape[2]-window_size + 1, stride[0]):

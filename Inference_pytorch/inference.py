@@ -49,7 +49,7 @@ parser.add_argument('--inference', default=0,
 parser.add_argument('--subArray', default=128,
                     help='size of subArray (e.g. 128*128)', type=int)
 parser.add_argument('--ADCprecision', default=5,
-                    help='ADC precision (e.g. 5-bit)')
+                    help='ADC precision (e.g. 5-bit)', type=int)
 parser.add_argument('--cellBit', default=4,
                     help='cell precision (e.g. 4-bit/cell)')
 parser.add_argument('--onoffratio', default=10,

@@ -96,7 +96,7 @@ elif args.dataset == 'imagenet':
 else:
     raise ValueError("Unknown dataset type")
 
-assert args.model in ['VGG8', 'DenseNet40', 'ResNet18', 'ResNet20'], args.model
+assert args.model in ['VGG8', 'DenseNet40', 'ResNet18', 'ResNet20', 'ResNet50'], args.model
 if args.model == 'VGG8':
     from models import VGG
     model = VGG.vgg8(args=args, logger=logger)
@@ -109,10 +109,15 @@ elif args.model == 'ResNet18':
     from models import ResNet
     model = ResNet.resnet18(args=args, logger=logger)
     criterion = torch.nn.CrossEntropyLoss()
+    #criterion = wage_util.SSE()
 elif args.model == 'ResNet20':
     from models import ResNet
     model = ResNet.resnet20(args=args, logger=logger)
     criterion = wage_util.SSE()
+elif args.model == 'ResNet50':
+    from models import ResNet
+    model = ResNet.resnet50(args=args, logger=logger)
+    criterion = torch.nn.CrossEntropyLoss()
 else:
     raise ValueError("Unknown model type")
 

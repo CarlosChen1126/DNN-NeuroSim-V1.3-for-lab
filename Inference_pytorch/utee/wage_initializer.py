@@ -10,27 +10,28 @@ def truncated_normal_(tensor, mean=0, std=1):
     tensor.data.copy_(tmp.gather(-1, ind).squeeze(-1))
     tensor.data.mul_(std).add_(mean)
 
-#def scale_limit(float_std, bits_W):
-#    delta = 1 / (2**(bits_W-1))
-#    limit = 1 - delta
-#    if bits_W >2 :
-#        limit_std = limit / math.sqrt(3)
-#    else:
-#        limit_std = 0.75 / math.sqrt(3)
-#    scale = 2 ** np.ceil(np.log2(limit_std/float_std))
-#    return limit,scale
-def scale_limit(limit, bits_W):
-    # This is a magic number, copied
-    #beta = 1.5 #2-bit weight
-    #beta = 1.5 * 64  #8-bit weight
-    beta = 1.5*128 #5-bit weight
-    Wm = beta / (2**(bits_W-1))
-    scale = 2 ** round(np.log2(Wm/limit))
-    scale = max(scale, 1.0)
-    limit = max(Wm, limit)
-    #scale_dict[name] = scale
-    #print(scale)
-    return limit,scale
+def scale_limit(float_std, bits_W):
+   delta = 1 / (2**(bits_W-1))
+   limit = 1 - delta
+   if bits_W >2 :
+       limit_std = limit / math.sqrt(3)
+   else:
+       limit_std = 0.75 / math.sqrt(3)
+   scale = 2 ** np.ceil(np.log2(limit_std/float_std))
+   return limit,scale
+# def scale_limit(limit, bits_W):
+#     # This is a magic number, copied
+#     #beta = 1.5 #2-bit weight
+#     #beta = 1.5 * 64  #8-bit weight
+#     beta = 1.5*128 #5-bit weight
+#     #beta = 1.5*256 #5-bit weight
+#     Wm = beta / (2**(bits_W-1))
+#     scale = 2 ** round(np.log2(Wm/limit))
+#     scale = max(scale, 1.0)
+#     limit = max(Wm, limit)
+#     #scale_dict[name] = scale
+#     #print(scale)
+#     return limit,scale
 def wage_init_(tensor, bits_W, factor=2.0, mode="fan_in"):
     if mode != "fan_in":
         raise NotImplementedError("support only wage normal")

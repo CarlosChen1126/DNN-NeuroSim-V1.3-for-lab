@@ -1,0 +1,48 @@
+=================FLAGS==================
+dataset: cifar10
+model: ResNet20
+mode: WAGE
+batch_size: 64
+epochs: 200
+grad_scale: 8
+seed: 117
+log_interval: 100
+test_interval: 1
+logdir: log/default/ADCprecision=5/batch_size=64/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=0/lr=0.01/mode=WAGE/model=ResNet20/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8
+lr: 0.01
+decreasing_lr: 140,180
+wl_weight: 8
+wl_grad: 8
+wl_activate: 8
+wl_error: 8
+inference: 0
+subArray: 128
+ADCprecision: 5
+cellBit: 4
+onoffratio: 10
+vari: 0
+t: 0
+v: 0
+detect: 0
+target: 0
+========================================
+decreasing_lr: [140, 180]
+training phase
+Train Epoch: 0 [6400/50000] Loss: 108.106415 Acc: 0.1875 lr: 1.00e-02
+Train Epoch: 0 [12800/50000] Loss: 53.309418 Acc: 0.2031 lr: 1.00e-02
+Train Epoch: 0 [19200/50000] Loss: 31.581512 Acc: 0.0938 lr: 1.00e-02
+Train Epoch: 0 [25600/50000] Loss: 29.329193 Acc: 0.2500 lr: 1.00e-02
+Train Epoch: 0 [32000/50000] Loss: 27.825104 Acc: 0.2656 lr: 1.00e-02
+Train Epoch: 0 [38400/50000] Loss: 27.234222 Acc: 0.2344 lr: 1.00e-02
+Train Epoch: 0 [44800/50000] Loss: 27.454132 Acc: 0.2500 lr: 1.00e-02
+Elapsed 34.35s, 34.35 s/epoch, 0.04 s/batch, ets 6834.92s
+testing phase
+	Epoch 0 Test set: Average loss: 26.2335, Accuracy: 3333/10000 (33%)
+Saving model to /home/b08901048/DNN-NeuroSim-V1.3-for-lab/Inference_pytorch/log/default/ADCprecision=5/batch_size=64/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=0/lr=0.01/mode=WAGE/model=ResNet20/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8/best-0.pth
+training phase
+Train Epoch: 1 [6400/50000] Loss: 25.505554 Acc: 0.4062 lr: 1.00e-02
+Train Epoch: 1 [12800/50000] Loss: 27.418091 Acc: 0.2656 lr: 1.00e-02
+Train Epoch: 1 [19200/50000] Loss: 26.878052 Acc: 0.2656 lr: 1.00e-02
+Train Epoch: 1 [25600/50000] Loss: 26.026276 Acc: 0.3906 lr: 1.00e-02
+Train Epoch: 1 [32000/50000] Loss: 26.183929 Acc: 0.3906 lr: 1.00e-02
+Total Elapse: 59.07, Best Result: 33.330%

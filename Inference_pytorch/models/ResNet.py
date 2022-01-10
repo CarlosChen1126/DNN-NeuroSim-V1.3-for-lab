@@ -177,7 +177,7 @@ class Bottleneck(nn.Module):
         out = self.bn3(out)
 
         if self.downsample is not None:
-            identity = self.downsample.layer(x)
+            identity = self.downsample(x)
 
         out += identity
         out = self.relu(out)
@@ -418,7 +418,7 @@ def resnet50(pretrained=None, progress=True, args=None, logger=None, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet50', Bottleneck, [3, 4, 6, 3], pretrained, progress,
+    return _resnet('resnet50', Bottleneck, [3, 4, 6, 3], pretrained, progress, args=args, logger=logger,
                    **kwargs)
 
 

@@ -69,6 +69,7 @@ def Conv2d(in_planes, out_planes, kernel_size, stride, padding, args=None, logge
                          wl_error=args.wl_error, wl_weight=args.wl_weight, inference=args.inference, onoffratio=args.onoffratio, cellBit=args.cellBit,
                          subArray=args.subArray, ADCprecision=args.ADCprecision, vari=args.vari, t=args.t, v=args.v, detect=args.detect, target=args.target,
                          name='Conv'+'_'+str(name)+'_', model=args.model)
+
     elif args.mode == "FP":
         conv2d = FConv2d(in_planes, out_planes, kernel_size, stride, padding, bias=False,
                          logger=logger, wl_input=args.wl_activate, wl_weight=args.wl_weight, inference=args.inference, onoffratio=args.onoffratio, cellBit=args.cellBit,
@@ -261,7 +262,6 @@ class ResNet_CIFAR(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        #print("=======================ResNet20 OK===========================")
         out = self.relu(self.bn1(self.conv1(x)))
         out = self.layer1(out)
         out = self.layer2(out)
@@ -380,12 +380,23 @@ def _resnet(arch, block, layers, pretrained=None, progress=True, args=None, logg
         model.load_state_dict(torch.load(pretrained))
     return model
 
-
+#### model from dnn-gating
 def resnet20(pretrained=None, progress=True, args=None, logger=None, **kwargs):
 
     return ResNet_CIFAR(BasicBlock_CIFAR, [3, 3, 3], args, logger, **kwargs)
 
+def resnet32(pretrained=None, progress=True, args=None, logger=None, **kwargs):
 
+    return ResNet_CIFAR(BasicBlock_CIFAR, [5, 5, 5], args, logger, **kwargs)
+
+def resnet44(pretrained=None, progress=True, args=None, logger=None, **kwargs):
+
+    return ResNet_CIFAR(BasicBlock_CIFAR, [7, 7, 7], args, logger, **kwargs)
+
+def resnet56(pretrained=None, progress=True, args=None, logger=None, **kwargs):
+
+    return ResNet_CIFAR(BasicBlock_CIFAR, [9, 9, 9], args, logger, **kwargs)
+####
 def resnet18(pretrained=None, progress=True, args=None, logger=None, **kwargs):
     r"""ResNet-18 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
@@ -406,7 +417,7 @@ def resnet34(pretrained=None, progress=True, args=None, logger=None, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet34', BasicBlock, [3, 4, 6, 3], pretrained, progress,
+    return _resnet('resnet34', BasicBlock, [3, 4, 6, 3], pretrained, progress, args=args, logger=logger,
                    **kwargs)
 
 

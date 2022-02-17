@@ -137,7 +137,8 @@ int main(int argc, char * argv[]) {
 	tileLocaEachLayer = ChipFloorPlan(false, false, false, netStructure, markNM,
 					maxPESizeNM, maxTileSizeCM, numPENM, pipelineSpeedUp,
 					&desiredNumTileNM, &desiredPESizeNM, &desiredNumTileCM, &desiredTileSizeCM, &desiredPESizeCM, &numTileRow, &numTileCol);
-	
+	cout << "NETSTRUCTURE SIZE" <<endl;
+	cout << netStructure.size() <<endl;
 	cout << "------------------------------ FloorPlan --------------------------------" <<  endl;
 	cout << endl;
 	cout << "Tile and PE size are optimized to maximize memory utilization ( = memory mapped by synapse / total memory on chip)" << endl;
@@ -174,6 +175,17 @@ int main(int argc, char * argv[]) {
 	}
 	cout << "Memory Utilization of Whole Chip: " << realMappedMemory/totalNumTile*100 << " % " << endl;
 	cout << endl;
+	for (int i=0; i<netStructure.size(); i++) {
+		//debug
+		// cout<< "["<<i<<"]"<<endl;
+		// cout<<netStructure[i][0]<<endl;
+		// cout<<netStructure[i][1]<<endl;
+		// cout<<netStructure[i][2]<<endl;
+		// cout<<netStructure[i][3]<<endl;
+		// cout<<netStructure[i][4]<<endl;
+		// cout<<netStructure[i][5]<<endl;
+		// cout<<netStructure[i][6]<<endl;
+	}
 	cout << "---------------------------- FloorPlan Done ------------------------------" <<  endl;
 	cout << endl;
 	cout << endl;
@@ -183,7 +195,6 @@ int main(int argc, char * argv[]) {
 	for (int i=0; i<netStructure.size(); i++) {
 		numComputation += 2*(netStructure[i][0] * netStructure[i][1] * netStructure[i][2] * netStructure[i][3] * netStructure[i][4] * netStructure[i][5]);
 	}
-
 	ChipInitialize(inputParameter, tech, cell, netStructure, markNM, numTileEachLayer,
 					numPENM, desiredNumTileNM, desiredPESizeNM, desiredNumTileCM, desiredTileSizeCM, desiredPESizeCM, numTileRow, numTileCol);
 			
@@ -193,7 +204,6 @@ int main(int argc, char * argv[]) {
 	double NMTileheight = 0;
 	double NMTilewidth = 0;
 	vector<double> chipAreaResults;
-		 			
 	chipAreaResults = ChipCalculateArea(inputParameter, tech, cell, desiredNumTileNM, numPENM, desiredPESizeNM, desiredNumTileCM, desiredTileSizeCM, desiredPESizeCM, numTileRow, 
 					&chipHeight, &chipWidth, &CMTileheight, &CMTilewidth, &NMTileheight, &NMTilewidth);		
 	chipArea = chipAreaResults[0];
@@ -237,9 +247,15 @@ int main(int argc, char * argv[]) {
 	double coreEnergyAccum = 0;
 	double coreEnergyOther = 0;
 	
+	cout<<netStructure.size()<<endl;
 	if (param->synchronous){
 		// calculate clkFreq
-		for (int i=0; i<netStructure.size(); i++) {		
+		for (int i=0; i<netStructure.size(); i++) {	
+			// cout<<"b"<<endl;
+			// cout<<i<<endl;
+			// cout<<argv[2*i+4]<<endl;
+			// cout<<argv[2*i+5]<<endl;
+			// cout<<netStructure[i][6]<<endl;
 			ChipCalculatePerformance(inputParameter, tech, cell, i, argv[2*i+4], argv[2*i+4], argv[2*i+5], netStructure[i][6],
 						netStructure, markNM, numTileEachLayer, utilizationEachLayer, speedUpEachLayer, tileLocaEachLayer,
 						numPENM, desiredPESizeNM, desiredTileSizeCM, desiredPESizeCM, CMTileheight, CMTilewidth, NMTileheight, NMTilewidth,

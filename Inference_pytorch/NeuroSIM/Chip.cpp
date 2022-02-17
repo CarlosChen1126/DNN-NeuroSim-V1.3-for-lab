@@ -582,7 +582,7 @@ double ChipCalculatePerformance(InputParameter& inputParameter, Technology& tech
 							double desiredPESizeCM, double CMTileheight, double CMTilewidth, double NMTileheight, double NMTilewidth,
 							double *readLatency, double *readDynamicEnergy, double *leakage, double *bufferLatency, double *bufferDynamicEnergy, double *icLatency, double *icDynamicEnergy, 
 							double *coreLatencyADC, double *coreLatencyAccum, double *coreLatencyOther, double *coreEnergyADC, double *coreEnergyAccum, double *coreEnergyOther, bool CalculateclkFreq, double *clkPeriod) {
-	
+	//cout<<"layernum "<<layerNumber<<endl;
 	
 	int numRowPerSynapse, numColPerSynapse;
 	numRowPerSynapse = param->numRowPerSynapse;
@@ -593,7 +593,6 @@ double ChipCalculatePerformance(InputParameter& inputParameter, Technology& tech
 	// get weight matrix file Size
 	int weightMatrixRow = netStructure[l][2]*netStructure[l][3]*netStructure[l][4]*numRowPerSynapse;
 	int weightMatrixCol = netStructure[l][5]*numColPerSynapse;
-	
 	// load in whole file 
 	vector<vector<double> > inputVector;
 	inputVector = LoadInInputData(inputfile); 
@@ -622,7 +621,11 @@ double ChipCalculatePerformance(InputParameter& inputParameter, Technology& tech
 	for (int i=0; i<netStructure.size(); i++) {
 		totalNumTile += numTileEachLayer[0][i] * numTileEachLayer[1][i];
 	}
-	
+	// cout<<"l  "<<endl;
+	// cout<<l<<endl;
+	// cout<<"markNM[l]"<<endl;
+	// cout<<markNM[l]<<endl;
+	// cout<<"bb"<<endl;
 	if (markNM[l] == 0) {   // conventional mapping
 		for (int i=0; i<ceil((double) netStructure[l][2]*(double) netStructure[l][3]*(double) netStructure[l][4]*(double) numRowPerSynapse/desiredTileSizeCM); i++) {       // # of tiles in row
 			for (int j=0; j<ceil((double) netStructure[l][5]*(double) numColPerSynapse/(double) desiredTileSizeCM); j++) {   // # of tiles in Column
@@ -745,7 +748,7 @@ double ChipCalculatePerformance(InputParameter& inputParameter, Technology& tech
 				double tileEnergyADC = 0;
 				double tileEnergyAccum = 0;
 				double tileEnergyOther = 0;
-				
+
 				// novel mapping
 				int numtileEachLayerRow = ceil((double) netStructure[l][2]*(double) numRowPerSynapse/(double) desiredPESizeNM);
 				int numtileEachLayerCol = ceil((double) netStructure[l][5]*(double) numColPerSynapse/(double) desiredPESizeNM);
@@ -757,18 +760,40 @@ double ChipCalculatePerformance(InputParameter& inputParameter, Technology& tech
 				vector<vector<double> > tileMemory;
 				tileMemory = ReshapeArray(newMemory, i*desiredPESizeNM, j*desiredPESizeNM, (int) netStructure[l][2]*numRowPerSynapse/numtileEachLayerRow, 
 									(int) netStructure[l][5]*numColPerSynapse/numtileEachLayerCol, numPENM, (int) netStructure[l][2]*numRowPerSynapse);
+				// cout<<"f"<<endl;
+				// cout<<"netStructure[l][0] ";
+				// cout<<netStructure[l][0]<<endl;
+				// cout<<"netStructure[l][3] ";
+				// cout<<netStructure[l][3]<<endl;
+				// cout<<"netStructure[l][1] ";
+				// cout<<netStructure[l][1]<<endl;
+				// cout<<"netStructure[l][4] ";
+				// cout<<netStructure[l][4]<<endl;
+				// cout<<"netStructure[l][2] ";
+				// cout<<netStructure[l][2]<<endl;
+				// cout<<"desiredPESizeNM ";
+				// cout<<desiredPESizeNM<<endl;
+				// cout<<"param->numBitInput ";
+				// cout<<param->numBitInput<<endl;
+				// cout<<"numRowPerSynapse ";
+				// cout<<numRowPerSynapse<<endl;
+				// cout<<"numtileEachLayerRow ";
+				// cout<<numtileEachLayerRow<<endl;
+				// cout<<"numPENM "<<endl;
+				// cout<<numPENM<<endl;
+
 
 				vector<vector<double> > tileInput;
 				tileInput = ReshapeInput(inputVector, i*desiredPESizeNM, (int) (netStructure[l][0]-netStructure[l][3]+1)*(netStructure[l][1]-netStructure[l][4]+1)*param->numBitInput, 
 									(int) netStructure[l][2]*numRowPerSynapse/numtileEachLayerRow, numPENM, (int) netStructure[l][2]*numRowPerSynapse);
 	
-				
+				//cout<<"g"<<endl;
 				TileCalculatePerformance(tileMemory, tileMemory, tileInput, markNM[l], numPENM, desiredPESizeNM, speedUpEachLayer[0][l], speedUpEachLayer[1][l],
 									numRowMatrix, numColMatrix, numInVector*param->numBitInput, cell, 
 									&tileReadLatency, &tileReadDynamicEnergy, &tileLeakage, &tilebufferLatency, &tilebufferDynamicEnergy, &tileicLatency, &tileicDynamicEnergy,
 									&tileLatencyADC, &tileLatencyAccum, &tileLatencyOther, &tileEnergyADC, &tileEnergyAccum, &tileEnergyOther, CalculateclkFreq, clkPeriod);
 				
-				
+				//cout<<"h"<<endl;
 				*readLatency = MAX(tileReadLatency, (*readLatency));
 				*readDynamicEnergy += tileReadDynamicEnergy;
 				*bufferLatency = MAX(tilebufferLatency, (*bufferLatency));
@@ -1340,15 +1365,38 @@ vector<vector<double> > CopyInput(const vector<vector<double> > &orginal, int po
 
 
 vector<vector<double> > ReshapeInput(const vector<vector<double> > &orginal, int positionRow, int numInputVector, int numRow, int numPE, int weightMatrixRow) {
-	
+	// cout<<"in"<<endl;
 	vector<vector<double> > copy;
+	// cout<<"numPE ";
+	// cout<<numPE<<endl;
+	// cout<<"numRow ";
+	// cout<<numRow<<endl;
+	// cout<<"numInputVector ";
+	// cout<<numInputVector<<endl;
+	//23328
 
 	for (int k=0; k<numPE; k++) {
+		// cout<<"k ";
+		// cout<<k<<endl;
 		for (int i=0; i<numRow; i++) {
+			// cout<<"i ";
+			// cout<<i<<endl;
+			// cout<<"positionRow+k*weightMatrixRow+i ";
+			// cout<<positionRow+k*weightMatrixRow+i<<endl;
+			// cout<<orginal[positionRow+k*weightMatrixRow+i].capacity()<<endl;//23323
+			// cout<<"hhh"<<endl;
 			vector<double> copyRow;
 			for (int j=0; j<numInputVector; j++) {
-				copyRow.push_back(orginal[positionRow+k*weightMatrixRow+i][j]);
+				//cout<<"oooooo  ";
+				//cout<<orginal[positionRow+k*weightMatrixRow+i][j]<<endl;
+				// cout<<"jjjj  ";
+				// cout<<j<<endl;
+				if(j<orginal[positionRow+k*weightMatrixRow+i].size()){
+					copyRow.push_back(orginal[positionRow+k*weightMatrixRow+i][j]);
+				}
+				//copyRow.push_back(orginal[positionRow+k*weightMatrixRow+i][j]);
 			}
+			//cout<<"f"<<endl;
 			copy.push_back(copyRow);
 			copyRow.clear();
 		}

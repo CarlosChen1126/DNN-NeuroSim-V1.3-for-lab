@@ -298,8 +298,13 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 		if (arrayDupRow < numSubArrayRow || arrayDupCol < numSubArrayCol) {
 			// a couple of subArrays are mapped by the matrix
 			// need to redefine the data-grab start-point
+
+			//int weightMatrixRow = min(desiredTileSizeCM, weightMatrixRow-i*desiredTileSizeCM);
+			//int weightMatrixCol = min(desiredTileSizeCM, weightMatrixCol-j*desiredTileSizeCM);
+
 			for (int i=0; i<ceil((double) weightMatrixRow/(double) param->numRowSubArray); i++) {
 				for (int j=0; j<ceil((double) weightMatrixCol/(double) param->numColSubArray); j++) {
+					cout<<"lllll"<<endl;
 					int numRowMatrix = min(param->numRowSubArray, weightMatrixRow-i*param->numRowSubArray);
 					int numColMatrix = min(param->numColSubArray, weightMatrixCol-j*param->numColSubArray);
 					
@@ -309,7 +314,6 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 						subArrayMemory = CopySubArray(newMemory, i*param->numRowSubArray, j*param->numColSubArray, numRowMatrix, numColMatrix);
 						vector<vector<double> > subArrayInput;
 						subArrayInput = CopySubInput(inputVector, i*param->numRowSubArray, numInVector, numRowMatrix);
-						
 						subArrayReadLatency = 0;
 						subArrayLatencyADC = 0;
 						subArrayLatencyAccum = 0;
@@ -396,13 +400,17 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 				input = GetInputVector(subArrayInput, k, &activityRowRead);
 				subArray->activityRowRead = activityRowRead;
 				int cellRange = pow(2, param->cellBit);
+				//cout<<"numInvector:  "<<numInVector<<endl;
 				
 				if (param->parallelRead) {
 					subArray->levelOutput = param->levelOutput;               // # of levels of the multilevelSenseAmp output
 				} else {
 					subArray->levelOutput = cellRange;
 				}
-				
+				//試試看在這裡把weight切成OU-based
+
+				//input size:27, subArrayMemory.size()=27, newMemory.size()=27
+
 				vector<double> columnResistance;
 				columnResistance = GetColumnResistance(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess);
 				

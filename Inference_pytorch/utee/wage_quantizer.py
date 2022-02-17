@@ -292,7 +292,7 @@ if __name__ == "__main__":
     print("="*80)
     print("Gradient")
     print("="*80)
-    quant_data = QG(test_tensor, bits_G, bits_R, lr, rand_tensor).data.numpy()
+    quant_data = QG(test_tensor, bits_G, lr).data.numpy()
     print(quant_data)
     # test QA
     print("="*80)

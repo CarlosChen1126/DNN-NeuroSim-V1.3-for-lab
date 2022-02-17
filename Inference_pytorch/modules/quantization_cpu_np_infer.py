@@ -9,7 +9,7 @@ import numpy as np
 class QConv2d(nn.Conv2d):
     def __init__(self, in_channels, out_channels, kernel_size,
                  stride=1, padding=0, dilation=1, groups=1, bias=False, logger=None, clip_weight=False, wage_init=False, quantize_weight=False, clip_output=False, quantize_output=False,
-                 wl_input=8, wl_activate=8, wl_error=8, wl_weight=8, inference=0, onoffratio=10, cellBit=1, subArray=128, ADCprecision=5, vari=0, t=0, v=0, detect=0, target=0, debug=0, name='Qconv', model=None):
+                 wl_input=8, wl_activate=8, wl_error=8, wl_weight=8, inference=0, onoffratio=10, cellBit=4, subArray=128, ADCprecision=5, vari=0, t=0, v=0, detect=0, target=0, debug=0, name='Qconv', model=None):
         super(QConv2d, self).__init__(in_channels, out_channels, kernel_size,
                                       stride, padding, dilation, groups, bias)
         self.logger = logger
@@ -38,9 +38,11 @@ class QConv2d(nn.Conv2d):
         self.scale = wage_initializer.wage_init_(
             self.weight, self.wl_weight, factor=1.0)
 
+    #def binary(self, x, wlbit, cellBit=self.cellBit):
+
     # @weak_script_method
     def forward(self, input):
-
+        # f = open("weight.txt", "w")
         weight1 = self.weight * self.scale + \
             (self.weight - self.weight * self.scale).detach()
         weight = weight1 + \
@@ -95,7 +97,7 @@ class QConv2d(nn.Conv2d):
                                     (remainder-0)+(cellRange-1)*lower
                                 remainderQ = remainderQ + remainderQ * \
                                     torch.normal(0., torch.full(
-                                        remainderQ.size(), self.vari, device='cuda'))
+                                        remainderQ.size(), self.vari, device='cuda',dtype=torch.int64))
                                 outputPartial = F.conv2d(
                                     input, remainderQ*mask, self.bias, self.stride, self.padding, self.dilation, self.groups)
                                 outputDummyPartial = F.conv2d(
@@ -218,8 +220,8 @@ class QConv2d(nn.Conv2d):
                 (self.weight - self.weight * self.scale).detach()
             weight = weight1 + \
                 (wage_quantizer.Q(weight1, self.wl_weight) - weight1).detach()
-            weight = wage_quantizer.Retention(
-                weight, self.t, self.v, self.detect, self.target)
+            # weight = wage_quantizer.Retention(
+            #     weight, self.t, self.v, self.detect, self.target)
             input = wage_quantizer.Q(input, self.wl_input)
             output = F.conv2d(input, weight, self.bias, self.stride,
                               self.padding, self.dilation, self.groups)
@@ -327,7 +329,7 @@ class QLinear(nn.Linear):
                             (remainder-0)+(cellRange-1)*lower
                         remainderQ = remainderQ + remainderQ * \
                             torch.normal(0., torch.full(
-                                remainderQ.size(), self.vari, device='cuda'))
+                                remainderQ.size(), self.vari, device='cuda', dtype=torch.float))
                         outputPartial = F.linear(
                             inputB, remainderQ*mask, self.bias)
                         outputDummyPartial = F.linear(

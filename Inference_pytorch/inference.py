@@ -100,6 +100,7 @@ elif args.dataset == 'imagenet':
 else:
     raise ValueError("Unknown dataset type")
 
+import torch.nn as nn
 assert args.model in ['VGG8', 'DenseNet40', 'ResNet18', 'ResNet20', 'ResNet50'], args.model
 if args.model == 'VGG8':
     from models import VGG
@@ -113,24 +114,36 @@ elif args.model == 'DenseNet40':
 elif args.model == 'ResNet18':
     from models import ResNet
     # FP mode pretrained model, loaded from 'https://download.pytorch.org/models/resnet18-5c106cde.pth'
-    # model_path = './log/xxx.pth'
-    # modelCF = ResNet.resnet18(args = args, logger=logger, pretrained = model_path)
-    modelCF = ResNet.resnet18(args=args, logger=logger, pretrained=True)
+    model_path = 'log/default/ADCprecision=5/batch_size=64/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=0/lr=0.01/mode=FP/model=ResNet18/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8/best-104.pth'
+    modelCF = ResNet.resnet18(args = args, logger=logger, pretrained = model_path)
+    #modelCF = ResNet.resnet18(args=args, logger=logger, pretrained=True)
 elif args.model == 'ResNet20':
     from models import ResNet
-    model_path='log/default/ADCprecision=5/batch_size=64/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=0/lr=0.01/mode=WAGE/model=ResNet20/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8/latest.pth'
+    #model_path='save_CIFAR10_model/model_resnet-20-2.pt'
+    #print("======================================")
+    model_path='log/default/ADCprecision=5/batch_size=64/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=0/lr=0.01/mode=WAGE/model=ResNet20/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8/best-176.pth'
+    #print(torch.load(model_path))
     modelCF = ResNet.resnet20(args=args, logger=logger, pretrained=model_path)
     modelCF.load_state_dict(torch.load(model_path))
-elif args.model == 'ResNet50':
+elif args.model == 'ResNet32':
     from models import ResNet
-    model_path='log/default/ADCprecision=5/batch_size=64/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=0/lr=0.01/mode=FP/model=ResNet50/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8/best-195.pth'
-    modelCF = ResNet.resnet50(args=args, logger=logger, pretrained=model_path)
+    modelCF = ResNet.resnet32(args=args, logger=logger, pretrained=model_path)
+    modelCF.load_state_dict(torch.load(model_path))
+elif args.model == 'ResNet44':
+    from models import ResNet
+    modelCF = ResNet.resnet44(args=args, logger=logger, pretrained=model_path)
+    modelCF.load_state_dict(torch.load(model_path))
+elif args.model == 'ResNet56':
+    from models import ResNet
+    modelCF = ResNet.resnet56(args=args, logger=logger, pretrained=model_path)
     modelCF.load_state_dict(torch.load(model_path))
 else:
     raise ValueError("Unknown model type")
 
 if args.cuda:
     modelCF.cuda()
+    print(modelCF)
+
 
 best_acc, old_file = 0, None
 t_begin = time.time()

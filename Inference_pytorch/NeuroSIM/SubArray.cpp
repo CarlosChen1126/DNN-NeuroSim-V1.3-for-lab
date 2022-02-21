@@ -159,6 +159,7 @@ void SubArray::Initialize(int _numRow, int _numCol, double _unitWireRes){  //ini
 			}
 			
 		} else if (conventionalParallel) {
+			//
 			wlSwitchMatrix.Initialize(ROW_MODE, numRow, resRow, true, false, activityRowRead, activityColWrite, numWriteCellPerOperationMemory, numWriteCellPerOperationNeuro, 1, clkFreq);
 			if (numColMuxed>1) {
 				mux.Initialize(ceil(numCol/numColMuxed), numColMuxed, resCellAccess/numRow/2, FPGA);       
@@ -591,7 +592,6 @@ void SubArray::CalculateLatency(double columnRes, const vector<double> &columnRe
 		readLatencyAccum = 0;
 		readLatencyOther = 0;
 		writeLatency = 0;
-
 		if (cell.memCellType == Type::SRAM) {
 			if (conventionalSequential) {
 				int numReadOperationPerRow = (int)ceil((double)numCol/numReadCellPerOperationNeuro);
@@ -785,6 +785,7 @@ void SubArray::CalculateLatency(double columnRes, const vector<double> &columnRe
 				}			
 			}
 	    } else if (cell.memCellType == Type::RRAM || cell.memCellType == Type::FeFET) {
+			//cout<<"columnResistance.size"<<columnResistance.size()<<endl;
 			if (conventionalSequential) {
 				double capBL = lengthCol * 0.2e-15/1e-6;
 				double colRamp = 0;

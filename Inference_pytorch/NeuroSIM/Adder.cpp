@@ -92,6 +92,8 @@ void Adder::CalculateArea(double _newHeight, double _newWidth, AreaModify _optio
 			wAdder = wNand * 9;
 			
 			if (wAdder > _newWidth) {
+				cout<<wAdder<<endl;
+				cout<<_newWidth<<endl;
 				cout << "[Adder] Error: A single adder width is even larger than the assigned width ! " << endl;
 			} else {
 				width = _newWidth;

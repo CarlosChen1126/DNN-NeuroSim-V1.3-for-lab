@@ -459,6 +459,8 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 					subArrayLatencyAccum = 0;
 					subArrayLatencyOther = 0;
 					
+					int numOUcol = 8;
+					int numOUrow = 8;
 					for (int k=0; k<numInVector; k++) {                 // calculate single subArray through the total input vectors
 						double activityRowRead = 0;
 						vector<double> input;
@@ -471,29 +473,91 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 						} else {
 							subArray->levelOutput = cellRange;
 						}
-						
-						vector<double> columnResistance;
-						columnResistance = GetColumnResistance(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess);
+						double maxLatency = 0;
 
-						subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
-						if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
-							*clkPeriod = subArray->readLatency;					//clk freq is decided by the longest sensing latency
+						bool OU_based = true;
+						if(OU_based){
+							for(int m=0; m<ceil((double) numColMatrix/ (double) numOUcol); m++){
+								for(int n=0; n<ceil((double) numRowMatrix/ (double) numOUrow); n++){
+									vector<double> columnResistance;
+									columnResistance = GetColumnResistanceM(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess, m, n);
+									subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
+									if(maxLatency< subArray->readLatency){
+										maxLatency = subArray->readLatency;
+									}
+									if(!CalculateclkFreq){
+										subArray->CalculatePower(columnResistance);
+										*readDynamicEnergy += subArray->readDynamicEnergy;
+										subArrayLeakage = subArray->leakage;
+										
+										subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
+										subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
+										subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
+										subArrayLatencyOther += subArray->readLatencyOther;
+										
+										*coreEnergyADC += subArray->readDynamicEnergyADC;
+										*coreEnergyAccum += subArray->readDynamicEnergyAccum;
+										*coreEnergyOther += subArray->readDynamicEnergyOther;
+									}
+
+								}
+							}
+							if(CalculateclkFreq){
+								*clkPeriod = maxLatency;					//clk freq is decided by the longest sensing latency
+							}
+
 						}
+						else{
+							vector<double> columnResistance;
+							columnResistance = GetColumnResistance(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess);
+
+							subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
+							if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
+								*clkPeriod = subArray->readLatency;					//clk freq is decided by the longest sensing latency
+							}
+							if(!CalculateclkFreq){
+								subArray->CalculatePower(columnResistance);
+								*readDynamicEnergy += subArray->readDynamicEnergy;
+								subArrayLeakage = subArray->leakage;
+								
+								subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
+								subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
+								subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
+								subArrayLatencyOther += subArray->readLatencyOther;
+								
+								*coreEnergyADC += subArray->readDynamicEnergyADC;
+								*coreEnergyAccum += subArray->readDynamicEnergyAccum;
+								*coreEnergyOther += subArray->readDynamicEnergyOther;
+							}
+
+						}
+
+
+						// vector<double> columnResistance;
+						// columnResistance = GetColumnResistance(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess);
+
+						//subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
+						// if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
+						// 	*clkPeriod = subArray->readLatency;					//clk freq is decided by the longest sensing latency
+						// }
+						// if(CalculateclkFreq){
+						// 	*clkPeriod = maxLatency;					//clk freq is decided by the longest sensing latency
+						// }
 						
-						if(!CalculateclkFreq){
-							subArray->CalculatePower(columnResistance);
-							*readDynamicEnergy += subArray->readDynamicEnergy;
-							subArrayLeakage = subArray->leakage;
+						// if(!CalculateclkFreq){
+						// 	subArray->CalculatePower(columnResistance);
+						// 	*readDynamicEnergy += subArray->readDynamicEnergy;
+						// 	subArrayLeakage = subArray->leakage;
 							
-							subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
-							subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
-							subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
-							subArrayLatencyOther += subArray->readLatencyOther;
+						// 	subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
+						// 	subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
+						// 	subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
+						// 	subArrayLatencyOther += subArray->readLatencyOther;
 							
-							*coreEnergyADC += subArray->readDynamicEnergyADC;
-							*coreEnergyAccum += subArray->readDynamicEnergyAccum;
-							*coreEnergyOther += subArray->readDynamicEnergyOther;
-						}
+						// 	*coreEnergyADC += subArray->readDynamicEnergyADC;
+						// 	*coreEnergyAccum += subArray->readDynamicEnergyAccum;
+						// 	*coreEnergyOther += subArray->readDynamicEnergyOther;
+						// }
 					}
 					*readLatency = MAX(subArrayReadLatency, (*readLatency));
 					*coreLatencyADC = MAX(subArrayLatencyADC, (*coreLatencyADC));
@@ -695,6 +759,68 @@ vector<double> GetColumnResistance(const vector<double> &input, const vector<vec
 	resistance.clear();
 } 
 
+vector<double> GetColumnResistanceM(const vector<double> &input, const vector<vector<double> > &weight, MemCell& cell, bool parallelRead, double resCellAccess, double OUcol, double OUrow) {
+	vector<double> resistance;
+	vector<double> conductance;
+	double columnG = 0; 
+	
+	for (int j=4*OUcol; j<4*(OUcol+1); j++) {
+		int activatedRow = 0;
+		columnG = 0;
+		for (int i=4*OUrow; i<4*(OUrow+1); i++) {
+			if (cell.memCellType == Type::RRAM) {	// eNVM
+				double totalWireResistance;
+				if (cell.accessType == CMOS_access) {
+					totalWireResistance = (double) 1.0/weight[i][j] + (j + 1) * param->wireResistanceRow + (weight.size() - i) * param->wireResistanceCol + cell.resistanceAccess;
+				} else {
+					totalWireResistance = (double) 1.0/weight[i][j] + (j + 1) * param->wireResistanceRow + (weight.size() - i) * param->wireResistanceCol;
+				}
+				if ((int) input[i] == 1) {
+					columnG += (double) 1.0/totalWireResistance;
+					activatedRow += 1 ;
+				} else {
+					columnG += 0;
+				}
+			} else if (cell.memCellType == Type::FeFET) {
+				double totalWireResistance;
+				totalWireResistance = (double) 1.0/weight[i][j] + (j + 1) * param->wireResistanceRow + (weight.size() - i) * param->wireResistanceCol;
+				if ((int) input[i] == 1) {
+					columnG += (double) 1.0/totalWireResistance;
+					activatedRow += 1 ;
+				} else {
+					columnG += 0;
+				}
+				
+			} else if (cell.memCellType == Type::SRAM) {	
+				// SRAM: weight value do not affect sense energy --> read energy calculated in subArray.cpp (based on wireRes wireCap etc)
+				double totalWireResistance = (double) (resCellAccess + param->wireResistanceCol);
+				if ((int) input[i] == 1) {
+					columnG += (double) 1.0/totalWireResistance;
+					activatedRow += 1 ;
+				} else {
+					columnG += 0;
+				}
+			}
+		}
+		
+		if (cell.memCellType == Type::RRAM || cell.memCellType == Type::FeFET) {
+			if (!parallelRead) {  
+				conductance.push_back((double) columnG/activatedRow);
+			} else {
+				conductance.push_back(columnG);
+			}
+		} else {
+			conductance.push_back(columnG);
+		}
+	}
+	// covert conductance to resistance
+	for (int i=4*OUcol; i<4*(OUcol+1); i++) {
+		resistance.push_back((double) 1.0/conductance[i]);
+	}
+		
+	return resistance;
+	resistance.clear();
+} 
 
 
 

@@ -147,10 +147,12 @@ Param::Param() {
 	relaxArrayCellHeight = 0;           // relax ArrayCellHeight or not
 	relaxArrayCellWidth = 0;            // relax ArrayCellWidth or not
 	
-	numColMuxed = 8;                    // How many columns share 1 ADC (for eNVM and FeFET) or parallel SRAM
+	//numColMuxed = 32;                    // How many columns share 1 ADC (for eNVM and FeFET) or parallel SRAM
+	numColMuxed = 4;
+	//numColSubArray/numColMuxed=OU size
 	//levelOutput = 32;
-	levelOutput = 128;                   // # of levels of the multilevelSenseAmp output, should be in 2^N forms; e.g. 32 levels --> 5-bit ADC (ADC resolution) 
-	cellBit = 2;// precision of memory device 
+	levelOutput = 32;                   // # of levels of the multilevelSenseAmp output, should be in 2^N forms; e.g. 32 levels --> 5-bit ADC (ADC resolution) 
+	cellBit = 1;// precision of memory device 
 	
 	/*** parameters for SRAM ***/
 	// due the scaling, suggested SRAM cell size above 22nm: 160F^2

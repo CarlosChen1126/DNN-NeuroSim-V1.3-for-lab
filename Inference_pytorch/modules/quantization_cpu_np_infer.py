@@ -222,7 +222,11 @@ class QConv2d(nn.Conv2d):
                 (wage_quantizer.Q(weight1, self.wl_weight) - weight1).detach()
             # weight = wage_quantizer.Retention(
             #     weight, self.t, self.v, self.detect, self.target)
-            input = wage_quantizer.Q(input, self.wl_input)
+            # print(input)
+            # print("=======================================")
+            # input = wage_quantizer.Q(input, self.wl_input)
+            # print(input)
+            # print("---------------------------------------")
             output = F.conv2d(input, weight, self.bias, self.stride,
                               self.padding, self.dilation, self.groups)
             output = wage_quantizer.LinearQuantizeOut(

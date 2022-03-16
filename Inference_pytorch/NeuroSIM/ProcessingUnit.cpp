@@ -307,7 +307,10 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 					cout<<"lllll"<<endl;
 					int numRowMatrix = min(param->numRowSubArray, weightMatrixRow-i*param->numRowSubArray);
 					int numColMatrix = min(param->numColSubArray, weightMatrixCol-j*param->numColSubArray);
-					
+					// cout<<"weightMatrixRow: "<<weightMatrixRow<<" "<<weightMatrixCol<<endl;
+					// cout<<"numRowMatrix "<<numRowMatrix<<" "<<numColMatrix<<endl;
+					// cout<<"subArrayMem size: "<<newMemory.size()<<"  "<<newMemory[0].size()<<endl;
+					// cout<<"tt: "<<i*param->numRowSubArray<<" "<<j*param->numColSubArray<<endl;
 					if ((i*param->numRowSubArray < weightMatrixRow) && (j*param->numColSubArray < weightMatrixCol) && (i*param->numRowSubArray < weightMatrixRow) ) {
 						// assign weight and input to specific subArray
 						vector<vector<double> > subArrayMemory;
@@ -453,14 +456,17 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 					subArrayMemory = CopySubArray(newMemory, i*param->numRowSubArray, j*param->numColSubArray, numRowMatrix, numColMatrix);
 					vector<vector<double> > subArrayInput;
 					subArrayInput = CopySubInput(inputVector, i*param->numRowSubArray, numInVector, numRowMatrix);
-					
+					// cout<<"weightMatrixRow: "<<weightMatrixRow<<" "<<weightMatrixCol<<endl;
+					// cout<<"numRowMatrix "<<numRowMatrix<<" "<<numColMatrix<<endl;
+					// cout<<"subArrayMem size: "<<newMemory.size()<<"  "<<newMemory[0].size()<<endl;
+					// cout<<"tt: "<<i*param->numRowSubArray<<" "<<j*param->numColSubArray<<endl;
 					subArrayReadLatency = 0;
 					subArrayLatencyADC = 0;
 					subArrayLatencyAccum = 0;
 					subArrayLatencyOther = 0;
 					
-					int numOUcol = 8;
-					int numOUrow = 8;
+					int numOUcol = 4;
+					int numOUrow = 4;
 					for (int k=0; k<numInVector; k++) {                 // calculate single subArray through the total input vectors
 						double activityRowRead = 0;
 						vector<double> input;
@@ -476,15 +482,59 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 						double maxLatency = 0;
 
 						bool OU_based = true;
+						bool OU_based_2 = false;
 						if(OU_based){
-							for(int m=0; m<ceil((double) numColMatrix/ (double) numOUcol); m++){
-								for(int n=0; n<ceil((double) numRowMatrix/ (double) numOUrow); n++){
+							for(int m=0; m<floor((double) numColMatrix/ (double) numOUcol)-1; m++){
+								for(int n=0; n<floor((double) numRowMatrix/ (double) numOUrow)-1; n++){
 									vector<double> columnResistance;
 									columnResistance = GetColumnResistanceM(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess, m, n);
 									subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
 									if(maxLatency< subArray->readLatency){
 										maxLatency = subArray->readLatency;
 									}
+									//CalculateclkFreq = false;
+									if(!CalculateclkFreq){
+										subArray->CalculatePower(columnResistance);
+										*readDynamicEnergy += subArray->readDynamicEnergy;
+										subArrayLeakage = subArray->leakage;
+										
+										subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
+										subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
+										subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
+										subArrayLatencyOther += subArray->readLatencyOther;
+										
+										*coreEnergyADC += subArray->readDynamicEnergyADC;
+										*coreEnergyAccum += subArray->readDynamicEnergyAccum;
+										*coreEnergyOther += subArray->readDynamicEnergyOther;
+									}
+
+
+								}
+							}
+							if(CalculateclkFreq){
+								*clkPeriod = maxLatency;					//clk freq is decided by the longest sensing latency
+							}
+						}
+						else if(OU_based_2){
+							//cout<<"test::"<<endl;
+							//cout<<floor((double) numColMatrix/ (double) numOUcol)<<endl;
+							//cout<<floor((double) numRowMatrix/ (double) numOUrow)<<endl;
+							for(int m=0; m<floor((double) numColMatrix/ (double) numOUcol)-1; m++){
+								for(int n=0; n<floor((double) numRowMatrix/ (double) numOUrow)-1; n++){
+									vector<vector<double> > subArrayMemoryM;
+									vector<vector<double> > subArrayInputM;
+									subArrayMemoryM=CopySubArray(newMemory, n*numOUrow, m*numOUcol, numOUrow, numOUcol);
+									subArrayInputM =CopySubInput(inputVector, n*numOUrow, numInVector, numOUrow);
+									vector<double> inputM;
+									inputM=GetInputVector(subArrayInputM, k, &activityRowRead);
+									vector<double> columnResistance;
+									//columnResistance = GetColumnResistanceM(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess, m, n);
+									columnResistance = GetColumnResistance(inputM, subArrayMemoryM, cell, param->parallelRead, subArray->resCellAccess);
+									subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
+									if(maxLatency< subArray->readLatency){
+										maxLatency = subArray->readLatency;
+									}
+									//CalculateclkFreq = false;
 									if(!CalculateclkFreq){
 										subArray->CalculatePower(columnResistance);
 										*readDynamicEnergy += subArray->readDynamicEnergy;
@@ -689,8 +739,10 @@ vector<double> GetInputVector(const vector<vector<double> > &input, int numInput
 			numofreadrow += 0;
 		}
 	}
+	//double totalnumRow = 4;
 	double totalnumRow = input.size();
 	*(activityRowRead) = numofreadrow/totalnumRow;
+	//cout<<"activityRowRead: "<<*(activityRowRead)<<endl;
 	return copy;
 	copy.clear();
 } 
@@ -764,10 +816,10 @@ vector<double> GetColumnResistanceM(const vector<double> &input, const vector<ve
 	vector<double> conductance;
 	double columnG = 0; 
 	
-	for (int j=4*OUcol; j<4*(OUcol+1); j++) {
+	for (int j=4*OUcol; j<min(4*(OUcol+1), (double) weight[0].size()); j++) {
 		int activatedRow = 0;
 		columnG = 0;
-		for (int i=4*OUrow; i<4*(OUrow+1); i++) {
+		for (int i=4*OUrow; i<min(4*(OUrow+1), (double) weight.size()); i++) {
 			if (cell.memCellType == Type::RRAM) {	// eNVM
 				double totalWireResistance;
 				if (cell.accessType == CMOS_access) {
@@ -814,7 +866,7 @@ vector<double> GetColumnResistanceM(const vector<double> &input, const vector<ve
 		}
 	}
 	// covert conductance to resistance
-	for (int i=4*OUcol; i<4*(OUcol+1); i++) {
+	for (int i=4*OUcol; i<min(4*(OUcol+1), (double) weight[0].size()); i++) {
 		resistance.push_back((double) 1.0/conductance[i]);
 	}
 		

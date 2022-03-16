@@ -195,9 +195,14 @@ void MultilevelSenseAmp::CalculatePower(const vector<double> &columnResistance, 
 
 		for (double i=0; i<columnResistance.size(); i++) {
 			double P_Col = 0;
+			//cout<<"i: "<<i<<endl;
+			//cout<<"columnResistance[i]: "<<columnResistance[i]<<endl;
 			P_Col = GetColumnPower(columnResistance[i]);
 			if (currentMode) {
 				readDynamicEnergy += MAX(P_Col*LatencyCol, 0);
+				// cout<<"columnRes[i]"<<columnResistance[i];
+				// cout<<" i "<<i<<endl;
+				// cout<<"P_Col: "<<P_Col<<endl;
 			} else {
 				readDynamicEnergy += MAX(P_Col*1e-9, 0);
 			}
@@ -212,6 +217,7 @@ void MultilevelSenseAmp::PrintProperty(const char* str) {
 
 
 double MultilevelSenseAmp::GetColumnLatency(double columnRes) {
+	//cout<<"columnRes: "<<columnRes<<endl;
 	double Column_Latency = 0;
 	double up_bound = 3, mid_bound = 1.1, low_bound = 0.9;
 	double T_max = 0;
@@ -319,6 +325,7 @@ double MultilevelSenseAmp::GetColumnLatency(double columnRes) {
 
 
 double MultilevelSenseAmp::GetColumnPower(double columnRes) {
+	//cout<<"columnRes: "<<columnRes<<endl;
 	double Column_Power = 0;
 	// in Cadence simulation, we fix Vread to 0.5V, with user-defined Vread (different from 0.5V)
 	// we should modify the equivalent columnRes

@@ -23,6 +23,7 @@ def Neural_Sim(self, input, output):
     else:
         #要改dnn-gating的話改這
         weight_q = wage_quantizer.Q(self.weight,self.wl_weight)
+
     new_weight = trans(weight_q.cpu().data.numpy(), 8)
     Lk = LRE(new_weight, 8)
     new_new_weight = LRE_index(new_weight, Lk, 8)
@@ -47,20 +48,12 @@ def Neural_Sim(self, input, output):
     print("shape:::::\n")
     print(new_weight.shape)
     print(new_new_weight.shape)
+    weight = (weight_q + 1) * (2**7)
+    write_matrix_weight_mm(weight, "t.csv")
     write_matrix_weight_m(new_weight, "test.csv")
     write_matrix_weight_m(new_new_weight, "test1.csv")
     
 
-    # print(Lk)
-    # print("======================================")
-    # print("======================================")
-    
-    # print(*new_new_weight)
-    # print("======================================")
-    # print("======================================")
-    # print("======================================")
-    # print("======================================")
-    # print("======================================")
     # print("======================================")
     write_matrix_weight( weight_q.cpu().data.numpy(),weight_file_name)
     if len(self.weight.shape) > 2:
@@ -71,16 +64,38 @@ def Neural_Sim(self, input, output):
     else:
         write_matrix_activation_fc(input[0].cpu().data.numpy(),None ,self.wl_input, input_file_name)
 def write_matrix_weight_m(input_matrix,filename):
-    cout = input_matrix.shape[0]*8
-    print(input_matrix.shape)
-    weight_matrix = input_matrix.reshape(cout,-1).transpose()
-    np.savetxt(filename, weight_matrix, delimiter=",",fmt='%10.5f')
+    new_weight_matrix = np.empty((input_matrix.shape[0]*8, input_matrix.shape[1]*input_matrix.shape[2]*input_matrix.shape[3]))
+    for i in range(input_matrix.shape[2]):
+        for j in range(input_matrix.shape[3]):
+            for k in range(input_matrix.shape[1]):
+                cout_y = 9*i+3*j+k
+                for l in range(input_matrix.shape[0]):
+                    for m in range(8):
+                        cout_x = 8*l+m
+                        new_weight_matrix[cout_x][cout_y] = input_matrix[l][k][i][j][m]
+    new_weight_matrix = new_weight_matrix.transpose()
+    #cout = input_matrix.shape[0]
+    #weight_matrix = input_matrix.reshape(cout,-1)
+    np.savetxt(filename, new_weight_matrix, delimiter=",",fmt='%d')
+
+def write_matrix_weight_mm(input_matrix,filename):
+    new_weight_matrix = np.empty((input_matrix.shape[0], input_matrix.shape[1]*input_matrix.shape[2]*input_matrix.shape[3]))
+    for i in range(input_matrix.shape[2]):
+        for j in range(input_matrix.shape[3]):
+            for k in range(input_matrix.shape[1]):
+                cout_y = 9*i+3*j+k
+                for l in range(input_matrix.shape[0]):
+                        new_weight_matrix[l][cout_y] = input_matrix[l][k][i][j] 
+    new_weight_matrix = new_weight_matrix.transpose()
+    #cout = input_matrix.shape[0]
+    #weight_matrix = input_matrix.reshape(cout,-1)
+    np.savetxt(filename, new_weight_matrix, delimiter=",",fmt='%d')
 
 def write_matrix_weight(input_matrix,filename):
     cout = input_matrix.shape[0]
     print(input_matrix.shape)
     weight_matrix = input_matrix.reshape(cout,-1).transpose()
-    np.savetxt(filename, weight_matrix, delimiter=",",fmt='%10.5f')
+    np.savetxt(filename, weight_matrix, delimiter=",",fmt='%10.5e')
 def LRE(weight, bits):
     new_weight = np.empty((weight.shape[0], weight.shape[1], weight.shape[2], weight.shape[3], bits))
     Lk = np.empty((weight.shape[2], weight.shape[3], weight.shape[1]))

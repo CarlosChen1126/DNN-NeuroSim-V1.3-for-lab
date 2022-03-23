@@ -1,1 +1,1 @@
-./NeuroSIM/main ./NeuroSIM/NetWork_ResNet20.csv 8 8 ./layer_record_ResNet20/weightConv_0_.csv ./layer_record_ResNet20/inputConv_0_.csv 
+./NeuroSIM/main ./NeuroSIM/NetWork_ResNet20.csv 8 8 ./layer_record_ResNet20/weightConv_0_.csv ./layer_record_ResNet20/inputConv_0_.csv ./layer_record_ResNet20/weightConv3x3_1_.csv ./layer_record_ResNet20/inputConv3x3_1_.csv ./layer_record_ResNet20/weightConv3x3_2_.csv ./layer_record_ResNet20/inputConv3x3_2_.csv 

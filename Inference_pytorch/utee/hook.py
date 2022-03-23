@@ -27,31 +27,16 @@ def Neural_Sim(self, input, output):
     new_weight = trans(weight_q.cpu().data.numpy(), 8)
     Lk = LRE(new_weight, 8)
     new_new_weight = LRE_index(new_weight, Lk, 8)
-    #torch.set_printoptions(profile="full")
-    #print(*new_weight)
-    # with open("LRE_checking.txt", "w") as w:
-    #     w.write(str(new_weight))
-    #     w.write("======================================")
-    #     w.write("======================================\n")
-    #     w.write(str(Lk))
-    #     w.write("======================================")
-    #     w.write("======================================\n")
-    #     w.write(str(new_new_weight))
-    #     w.write("======================================")
-    #     w.write("======================================")
-    #     w.write("======================================")
-    #     w.write("======================================")
-    #     w.write("======================================\n")
     new_weight = booltoint(new_weight)
     new_new_weight = booltoint(new_new_weight)
-    print(Lk)
-    print("shape:::::\n")
-    print(new_weight.shape)
-    print(new_new_weight.shape)
+    # print("shape:::::\n")
+    # print(new_weight.shape)
+    # print(new_new_weight.shape)
     weight = (weight_q + 1) * (2**7)
-    write_matrix_weight_mm(weight, "t.csv")
-    write_matrix_weight_m(new_weight, "test.csv")
-    write_matrix_weight_m(new_new_weight, "test1.csv")
+    write_matrix_weight_mm(weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_modified_'+'.csv')
+    new_weight_2D = write_matrix_weight_m(new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_cellBit1_'+'.csv')
+    lre_weight_2D = write_matrix_weight_m(new_new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_after_LRE'+'.csv')
+    LRE_compression(new_weight_2D, 8, 8)
     
 
     # print("======================================")
@@ -63,6 +48,7 @@ def Neural_Sim(self, input, output):
         write_matrix_activation_conv(stretch_input(input[0].cpu().data.numpy(),k,padding,stride),None,self.wl_input,input_file_name)
     else:
         write_matrix_activation_fc(input[0].cpu().data.numpy(),None ,self.wl_input, input_file_name)
+#0 1 format(cell format)
 def write_matrix_weight_m(input_matrix,filename):
     new_weight_matrix = np.empty((input_matrix.shape[0]*8, input_matrix.shape[1]*input_matrix.shape[2]*input_matrix.shape[3]))
     for i in range(input_matrix.shape[2]):
@@ -73,20 +59,26 @@ def write_matrix_weight_m(input_matrix,filename):
                     for m in range(8):
                         cout_x = 8*l+m
                         new_weight_matrix[cout_x][cout_y] = input_matrix[l][k][i][j][m]
+    #print("print(new_weight_matrix.shape)")
+    #print(new_weight_matrix.shape)
     new_weight_matrix = new_weight_matrix.transpose()
+    #print(new_weight_matrix.shape)
     #cout = input_matrix.shape[0]
     #weight_matrix = input_matrix.reshape(cout,-1)
-    np.savetxt(filename, new_weight_matrix, delimiter=",",fmt='%d')
-
+    np.savetxt(filename, new_weight_matrix, delimiter=",",fmt='%5.1f')
+    return new_weight_matrix
+#int format
 def write_matrix_weight_mm(input_matrix,filename):
+    D = input_matrix.shape[1]
     new_weight_matrix = np.empty((input_matrix.shape[0], input_matrix.shape[1]*input_matrix.shape[2]*input_matrix.shape[3]))
     for i in range(input_matrix.shape[2]):
         for j in range(input_matrix.shape[3]):
             for k in range(input_matrix.shape[1]):
-                cout_y = 9*i+3*j+k
+                cout_y = D*3*i+D*j+k
                 for l in range(input_matrix.shape[0]):
                         new_weight_matrix[l][cout_y] = input_matrix[l][k][i][j] 
     new_weight_matrix = new_weight_matrix.transpose()
+    #print(new_weight_matrix)
     #cout = input_matrix.shape[0]
     #weight_matrix = input_matrix.reshape(cout,-1)
     np.savetxt(filename, new_weight_matrix, delimiter=",",fmt='%d')
@@ -95,7 +87,7 @@ def write_matrix_weight(input_matrix,filename):
     cout = input_matrix.shape[0]
     print(input_matrix.shape)
     weight_matrix = input_matrix.reshape(cout,-1).transpose()
-    np.savetxt(filename, weight_matrix, delimiter=",",fmt='%10.5e')
+    np.savetxt(filename, weight_matrix, delimiter=",",fmt='%10.5f')
 def LRE(weight, bits):
     new_weight = np.empty((weight.shape[0], weight.shape[1], weight.shape[2], weight.shape[3], bits))
     Lk = np.empty((weight.shape[2], weight.shape[3], weight.shape[1]))
@@ -236,16 +228,46 @@ def LRE_index(weight, Lk, wbits):
         for j in range(weight.shape[3]):
             for k in range(weight.shape[1]):
                 index = int(Lk[i][j][k])
-                print(index)
                 
                 for l in range(weight.shape[0]):
                     for m in range(wbits):
                         new_weight[l][k][i][j][m] = weight[l][index][i][j][m]
     return new_weight
 
+def LRE_compression(weight, OUrow, OUcol):
+    print("Original_weight_shape::")
+    print(weight.shape)
+    conpressed_col = 0 #OU size col
+    ctrl=1
+    for i in range(math.floor(weight.shape[0]/OUrow)):
+        for j in range(math.floor(weight.shape[1]/OUcol)):
+            ou_matrix = np.empty((OUrow, OUcol))
+            for k in range(OUrow):
+                for l in range(OUcol):
+                    ind_x = (OUrow*i) +k
+                    ind_y = (OUcol*j) +l
+                    ind_x = min(ind_x, weight.shape[0]-1)
+                    ind_y = min(ind_y, weight.shape[1]-1)
+                    #print("ind_x")
+                    #print(ind_x)
+                    ou_matrix[k][l] = weight[ind_x][ind_y] #OU of now's MVM
+                    if(weight.shape[0]-1-8*i<0):
+                        ctrl = 0
+            if(ctrl):
+                for m in range(OUcol):
+                    verify = 0
+                    for n in range(OUrow):
+                        verify += ou_matrix[n][m]
+                        #print(ou_matrix[n][m])
+                    if(verify == 0):
+                        print("Compressed!")
+                        print(i)
+                        print(j)
+                        for ll in range(8):
+                            print(ou_matrix[ll][m])
 
 
-#def OU_scan(weight, OUrow, OUcol):
+
 
 
 def float2bin(target, bits):

@@ -25,7 +25,6 @@ def Neural_Sim(self, input, output):
         weight_q = wage_quantizer.Q(self.weight,self.wl_weight)
 
     new_weight = trans(weight_q, 8)
-    new_weight = booltoint(new_weight)
     #new_weight_2D = write_matrix_weight_m(new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_cellBit1_'+'.csv')
 
     Lk = LRE(new_weight, 8)
@@ -44,12 +43,12 @@ def Neural_Sim(self, input, output):
 
     # print("======================================")
     write_matrix_weight( weight_q.cpu().data.numpy(),weight_file_name)
-    print(stretch_input(input[0].cpu()))
     if len(self.weight.shape) > 2:
         k=self.weight.shape[-1]
         padding = self.padding
-        stride = self.stride    
-        write_matrix_activation_conv(stretch_input(input[0].cpu().data.numpy(),k,padding,stride),None,self.wl_input,input_file_name)
+        stride = self.stride
+        activation_2D = write_matrix_activation_conv(stretch_input(input[0].cpu().data.numpy(),k,padding,stride),None,self.wl_input,input_file_name)
+        #RIS_compression(activation_2D,8,8)
     else:
         write_matrix_activation_fc(input[0].cpu().data.numpy(),None ,self.wl_input, input_file_name)
 #0 1 format(cell format)
@@ -325,20 +324,53 @@ def RWS_compression(weight, OUrow, OUcol):
     print("compressed_col:")
     print(compressed_col)
 
+def RIS_compression(activation, OUrow, OUcol):
+    print("ac.shape")
+    print(activation.shape)
+    compressed_input = 0
+    record = np.empty(2**OUrow)
+    #(27, 8192)
+    #(144, 8192)
+    for i in range(activation.shape[1]):
+        for j in range(math.floor(activation.shape[0]/OUcol)):
+            col_activation = 0
+            for k in range(OUcol):
+                ind_x = j* OUcol +k
+                col_activation += int(activation[ind_x][i])*(2**k)
+            if(record[int(col_activation)] == 0):
+                record[int(col_activation)] = 1
+            else:
+                compressed_input +=1
+                #print("activation compressed")
+    print("compressed_input")
+    print(compressed_input)
+
 def float2bin(target, bits):
-    new_bin = []
-    for i in range(bits-1, -1, -1):
-        new_bin.append(target // (2**i))
-        target %= (2**i)
+    new_bin = np.empty(bits)
+    for i in range(bits):
+        val = target // (2**(bits-1-i))
+        new_bin[i] = val
+        target = target % (2**(bits-1-i))
+    return new_bin
+
+
+
+    # for i in range(bits-1, -1, -1):
+    #     new_bin.append(target // (2**i))
+    #     target %= (2**i)
     #print(new_bin)
     return new_bin
 
 def write_matrix_activation_conv(input_matrix,fill_dimension,length,filename):
+    #(27,1024*8=8192)
+    #(144,1024*8=8192)
     filled_matrix_b = np.zeros([input_matrix.shape[2],input_matrix.shape[1]*length],dtype=np.str)
     filled_matrix_bin,scale = dec2bin(input_matrix[0,:],length)
     for i,b in enumerate(filled_matrix_bin):
         filled_matrix_b[:,i::length] =  b.transpose()
+    print(filled_matrix_b.shape)
     np.savetxt(filename, filled_matrix_b, delimiter=",",fmt='%s')
+    return filled_matrix_b
 
 
 def write_matrix_activation_fc(input_matrix,fill_dimension,length,filename):
@@ -349,6 +381,8 @@ def write_matrix_activation_fc(input_matrix,fill_dimension,length,filename):
         filled_matrix_b[:,i] =  b
     np.savetxt(filename, filled_matrix_b, delimiter=",",fmt='%s')
 
+#input size:W*W*D
+#W=32; D=27,144
 
 def stretch_input(input_matrix,window_size = 5,padding=(0,0),stride=(1,1)):
     input_shape = input_matrix.shape

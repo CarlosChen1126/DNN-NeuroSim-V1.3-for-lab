@@ -24,7 +24,10 @@ def Neural_Sim(self, input, output):
         #要改dnn-gating的話改這
         weight_q = wage_quantizer.Q(self.weight,self.wl_weight)
 
-    new_weight = trans(weight_q.cpu().data.numpy(), 8)
+    new_weight = trans(weight_q, 8)
+    new_weight = booltoint(new_weight)
+    #new_weight_2D = write_matrix_weight_m(new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_cellBit1_'+'.csv')
+
     Lk = LRE(new_weight, 8)
     new_new_weight = LRE_index(new_weight, Lk, 8)
     new_weight = booltoint(new_weight)
@@ -36,11 +39,12 @@ def Neural_Sim(self, input, output):
     write_matrix_weight_mm(weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_modified_'+'.csv')
     new_weight_2D = write_matrix_weight_m(new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_cellBit1_'+'.csv')
     lre_weight_2D = write_matrix_weight_m(new_new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_after_LRE'+'.csv')
-    LRE_compression(new_weight_2D, 8, 8)
-    
+    #LRE_compression(lre_weight_2D, 8, 8)
+    #RWS_compression(lre_weight_2D, 8, 8)
 
     # print("======================================")
     write_matrix_weight( weight_q.cpu().data.numpy(),weight_file_name)
+    print(stretch_input(input[0].cpu()))
     if len(self.weight.shape) > 2:
         k=self.weight.shape[-1]
         padding = self.padding
@@ -198,10 +202,10 @@ def booltoint(weight):
             for k in range(weight.shape[2]):
                 for l in range(weight.shape[3]):
                     for m in range(weight.shape[4]):
-                        if(weight[i][j][k][l][m] == 0):
-                            new_weight[i][j][k][l][m] = int(0)
-                        else:
+                        if(weight[i][j][k][l][m] != 0):
                             new_weight[i][j][k][l][m] = int(1)
+                        else:
+                            new_weight[i][j][k][l][m] = int(0)
     return new_weight
 def trans(input_matrix, bits):
     weight = (input_matrix + 1) * (2**(bits-1))
@@ -209,15 +213,17 @@ def trans(input_matrix, bits):
     #(16,3,3,3)
     #(N,D,K,K)
     #(16,16,3,3)
+    #(32,16,3,3)
+    #(32,32,3,3)
     #print(input_matrix.shape)
     new_weight = np.empty((weight.shape[0], weight.shape[1], weight.shape[2], weight.shape[3], bits))
-    for i in range(int(len(weight))):
-        for j in range(int(len(weight[i]))):
-            for k in range(int(len(weight[i][j]))):
-                for l in range(int(len(weight[i][j][k]))):
+    for i in range(weight.shape[0]):
+        for j in range(weight.shape[1]):
+            for k in range(weight.shape[2]):
+                for l in range(weight.shape[3]):
                     binn = float2bin(weight[i][j][k][l], 8)
                     for m in range(bits):
-                        new_weight[i][j][k][l][m] = int(binn[m])
+                        new_weight[i][j][k][l][m] = binn[m]
     return new_weight
     #target = weight[0][0][0][0]
     #binn =float2bin(target, 8)
@@ -237,7 +243,7 @@ def LRE_index(weight, Lk, wbits):
 def LRE_compression(weight, OUrow, OUcol):
     print("Original_weight_shape::")
     print(weight.shape)
-    conpressed_col = 0 #OU size col
+    compressed_col = 0 #OU size col
     ctrl=1
     for i in range(math.floor(weight.shape[0]/OUrow)):
         for j in range(math.floor(weight.shape[1]/OUcol)):
@@ -246,34 +252,83 @@ def LRE_compression(weight, OUrow, OUcol):
                 for l in range(OUcol):
                     ind_x = (OUrow*i) +k
                     ind_y = (OUcol*j) +l
-                    ind_x = min(ind_x, weight.shape[0]-1)
-                    ind_y = min(ind_y, weight.shape[1]-1)
+                    #ind_x = min(ind_x, weight.shape[0]-1)
+                    #ind_y = min(ind_y, weight.shape[1]-1)
                     #print("ind_x")
                     #print(ind_x)
                     ou_matrix[k][l] = weight[ind_x][ind_y] #OU of now's MVM
-                    if(weight.shape[0]-1-8*i<0):
-                        ctrl = 0
-            if(ctrl):
-                for m in range(OUcol):
-                    verify = 0
-                    for n in range(OUrow):
-                        verify += ou_matrix[n][m]
-                        #print(ou_matrix[n][m])
-                    if(verify == 0):
-                        print("Compressed!")
-                        print(i)
-                        print(j)
-                        for ll in range(8):
-                            print(ou_matrix[ll][m])
+                #if(weight.shape[0]-1-8*i<0):
+                    #print(i)
+                    #ctrl = 0
+            #print(ou_matrix)
+            #if(ctrl):
+            for m in range(OUcol):
+                verify = 0
+                for n in range(OUrow):
+                    verify += ou_matrix[n][m]
+                    #print(ou_matrix[n][m])
+                if(verify == 0):
+                    compressed_col+=1
+                    print("Compressed!")
+                    print(ou_matrix)
+                    # print(i)
+                    # print(j)
+                    # for ll in range(8):
+                    #     print(ou_matrix[ll][m])
+    x = math.floor(weight.shape[0]/OUrow)
+    
+    if(weight.shape[0]-x*OUrow > 0):
+        small_compressed_col=0
+        print("weight.shape[0]")
+        print(weight.shape[0])
+        for i in range(weight.shape[1]):
+            verify=0
+            for j in range(x*OUrow, weight.shape[0]):
+                verify+=weight[j][i]
+            if(verify ==0):
+                small_compressed_col+=1
+                #print("small_compressed")
+            
+    print("compressed_col(OUcol_size):")
+    print(compressed_col)
+    if(weight.shape[0]-x*OUrow > 0):
+        print("rest_compressed_col(col)")
+        print(small_compressed_col)
 
-
-
-
+def RWS_compression(weight, OUrow, OUcol):
+    compressed_col = 0
+    record = np.empty(2**OUrow)
+    x=math.floor(weight.shape[0]/OUrow)
+    y=math.floor(weight.shape[1]/OUcol)
+    for i in range(math.floor(weight.shape[0]/OUrow)):
+        for j in range(math.floor(weight.shape[1]/OUcol)):
+            ou_matrix = np.empty((OUrow, OUcol))
+            for k in range(OUrow):
+                for l in range(OUcol):
+                    ind_x = (OUrow*i) +k
+                    ind_y = (OUcol*j) +l
+                    ou_matrix[k][l] = weight[ind_x][ind_y]
+            
+            for m in range(OUcol):
+                verify = 0
+                col_weight=0
+                for n in range(OUrow):
+                    col_weight+=ou_matrix[m][n]*(2**n)
+                if(col_weight >0):
+                    if(col_weight > 255):
+                        print(ou_matrix)
+                    if(record[int(col_weight)]==1):
+                        compressed_col+=1
+                        print("compressed!")
+                    else:
+                        record[int(col_weight)]=1
+    print("compressed_col:")
+    print(compressed_col)
 
 def float2bin(target, bits):
     new_bin = []
     for i in range(bits-1, -1, -1):
-        new_bin.append(int(target // (2**i)))
+        new_bin.append(target // (2**i))
         target %= (2**i)
     #print(new_bin)
     return new_bin

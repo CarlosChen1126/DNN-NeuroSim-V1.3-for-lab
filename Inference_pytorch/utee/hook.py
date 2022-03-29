@@ -25,22 +25,24 @@ def Neural_Sim(self, input, output):
         weight_q = wage_quantizer.Q(self.weight,self.wl_weight)
 
     new_weight = trans(weight_q, 8)
+    print(new_weight.shape)
+    #(16*8,27)
     #new_weight_2D = write_matrix_weight_m(new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_cellBit1_'+'.csv')
-
-    Lk = LRE(new_weight, 8)
-    new_new_weight = LRE_index(new_weight, Lk, 8)
-    new_weight = booltoint(new_weight)
-    new_new_weight = booltoint(new_new_weight)
+    #Lk = LRE(new_weight, 8)
+    #new_new_weight = LRE_index(new_weight, Lk, 8)
+    #new_weight = booltoint(new_weight, 8)
+    #new_new_weight = booltoint(new_new_weight)
     # print("shape:::::\n")
     # print(new_weight.shape)
     # print(new_new_weight.shape)
     weight = (weight_q + 1) * (2**7)
     write_matrix_weight_mm(weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_modified_'+'.csv')
-    new_weight_2D = write_matrix_weight_m(new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_cellBit1_'+'.csv')
-    lre_weight_2D = write_matrix_weight_m(new_new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_after_LRE'+'.csv')
+    
+    new_weight = write_matrix_weight_m(new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_cellBit1_'+'.csv')
+    #new_new_weight = write_matrix_weight_m(new_new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_after_LRE'+'.csv')
     #LRE_compression(lre_weight_2D, 8, 8)
     #RWS_compression(lre_weight_2D, 8, 8)
-
+    np.savetxt('./layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_cellBit1_'+'.csv', new_weight, delimiter=",",fmt='%d')
     # print("======================================")
     write_matrix_weight( weight_q.cpu().data.numpy(),weight_file_name)
     if len(self.weight.shape) > 2:
@@ -53,23 +55,9 @@ def Neural_Sim(self, input, output):
         write_matrix_activation_fc(input[0].cpu().data.numpy(),None ,self.wl_input, input_file_name)
 #0 1 format(cell format)
 def write_matrix_weight_m(input_matrix,filename):
-    new_weight_matrix = np.empty((input_matrix.shape[0]*8, input_matrix.shape[1]*input_matrix.shape[2]*input_matrix.shape[3]))
-    for i in range(input_matrix.shape[2]):
-        for j in range(input_matrix.shape[3]):
-            for k in range(input_matrix.shape[1]):
-                cout_y = 9*i+3*j+k
-                for l in range(input_matrix.shape[0]):
-                    for m in range(8):
-                        cout_x = 8*l+m
-                        new_weight_matrix[cout_x][cout_y] = input_matrix[l][k][i][j][m]
-    #print("print(new_weight_matrix.shape)")
-    #print(new_weight_matrix.shape)
-    new_weight_matrix = new_weight_matrix.transpose()
-    #print(new_weight_matrix.shape)
-    #cout = input_matrix.shape[0]
-    #weight_matrix = input_matrix.reshape(cout,-1)
-    np.savetxt(filename, new_weight_matrix, delimiter=",",fmt='%5.1f')
-    return new_weight_matrix
+    input_matrix = input_matrix.transpose()
+    np.savetxt(filename, input_matrix, delimiter=",",fmt='%5.1f')
+    return input_matrix.transpose()
 #int format
 def write_matrix_weight_mm(input_matrix,filename):
     D = input_matrix.shape[1]
@@ -85,7 +73,6 @@ def write_matrix_weight_mm(input_matrix,filename):
     #cout = input_matrix.shape[0]
     #weight_matrix = input_matrix.reshape(cout,-1)
     np.savetxt(filename, new_weight_matrix, delimiter=",",fmt='%d')
-
 def write_matrix_weight(input_matrix,filename):
     cout = input_matrix.shape[0]
     print(input_matrix.shape)
@@ -193,36 +180,40 @@ def all_eq_R(mHD, R):
         if(mHD[i] != R):
             index = 0
     return index
-def booltoint(weight):
-    new_weight = np.empty((weight.shape[0], weight.shape[1], weight.shape[2], weight.shape[3], 8))
+def booltoint(weight, bits):
+    new_weight = np.empty((weight.shape[0], weight.shape[1]))
 
-    for i in range(weight.shape[0]):
-        for j in range(weight.shape[1]):
-            for k in range(weight.shape[2]):
-                for l in range(weight.shape[3]):
-                    for m in range(weight.shape[4]):
-                        if(weight[i][j][k][l][m] != 0):
-                            new_weight[i][j][k][l][m] = int(1)
-                        else:
-                            new_weight[i][j][k][l][m] = int(0)
+    for x in range(weight.shape[0]):
+        for y in range(weight.shape[1]):
+            if(weight[x][y] != 0):
+                new_weight[x][y] = int(1)
+            else:
+                new_weight[x][y] = int(0)
     return new_weight
 def trans(input_matrix, bits):
-    weight = (input_matrix + 1) * (2**(bits-1))
+    weight = (input_matrix + 1) * (2**(int(bits)-1))
+    D = input_matrix.shape[1]
+    new_weight_matrix = np.empty((input_matrix.shape[0], input_matrix.shape[1]*input_matrix.shape[2]*input_matrix.shape[3]))
+    for i in range(input_matrix.shape[2]):
+        for j in range(input_matrix.shape[3]):
+            for k in range(input_matrix.shape[1]):
+                cout_y = D*3*i+D*j+k
+                for l in range(input_matrix.shape[0]):
+                        new_weight_matrix[l][cout_y] = weight[l][k][i][j] 
+
     # weight.shape:
     #(16,3,3,3)
     #(N,D,K,K)
     #(16,16,3,3)
     #(32,16,3,3)
     #(32,32,3,3)
-    #print(input_matrix.shape)
-    new_weight = np.empty((weight.shape[0], weight.shape[1], weight.shape[2], weight.shape[3], bits))
-    for i in range(weight.shape[0]):
-        for j in range(weight.shape[1]):
-            for k in range(weight.shape[2]):
-                for l in range(weight.shape[3]):
-                    binn = float2bin(weight[i][j][k][l], 8)
-                    for m in range(bits):
-                        new_weight[i][j][k][l][m] = binn[m]
+    new_weight = np.empty((new_weight_matrix.shape[0]*int(bits), new_weight_matrix.shape[1]))
+    for x in range(new_weight_matrix.shape[0]):
+        for y in range(new_weight_matrix.shape[1]):
+            temp = float2bin(new_weight_matrix[x][y], bits)
+            C = 8*x
+            for m in range(bits):
+                new_weight[C+m][y] = temp[m]
     return new_weight
     #target = weight[0][0][0][0]
     #binn =float2bin(target, 8)

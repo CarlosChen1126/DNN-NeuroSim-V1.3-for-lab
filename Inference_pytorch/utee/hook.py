@@ -40,12 +40,12 @@ def Neural_Sim(self, input, output):
     print(new_weight.shape)
     print("===========================================")
     #(16*8, 27)
-    rws_compressed_col = 0
-    lre_compressed_col = 0
-    ris_compressed_col = 0
+    rws_compressed_col = []
+    lre_compressed_col = []
+    ris_compressed_col = []
     #LRE_compression(new_weight.transpose(), 8, 8)
     lre_compressed_col = LRE_compression(new_new_weight.transpose(), 8, 8)
-    rws_compressed_col = RWS_compression(new_weight.transpose(), 8, 8)
+    #rws_compressed_col = RWS_compression(new_weight.transpose(), 8, 8)
 
     write_matrix_weight(weight_q.cpu().data.numpy(),weight_file_name)
     if len(self.weight.shape) > 2:
@@ -56,16 +56,16 @@ def Neural_Sim(self, input, output):
         ris_compressed_col = RIS_compression(activation_2D,8,8)
     else:
         write_matrix_activation_fc(input[0].cpu().data.numpy(),None ,self.wl_input, input_file_name)
-    cycle = cal_OUcycle(activation_2D, new_weight, 8, 8, 0, 0, 0)
+    cycle = cal_OUcycle(activation_2D, new_weight, 8, 8, [], [], [])
     new_cycle = cal_OUcycle(activation_2D, new_weight, 8, 8, lre_compressed_col, rws_compressed_col, ris_compressed_col)
     print("===================================================")
     print("MVM_cycle(original) : ", cycle)
     print("Use the compressed algorithm:")
-    if(lre_compressed_col != 0):
+    if(lre_compressed_col != []):
         print("LRE")
-    if(rws_compressed_col != 0):
+    if(rws_compressed_col != []):
         print("RWS")
-    if(ris_compressed_col != 0):
+    if(ris_compressed_col != []):
         print("RIS")
     print("MVM_cycle(after_compressed) : ", new_cycle)
     print("compressed_ratio : ", (cycle-new_cycle)*100/cycle, "%")
@@ -306,9 +306,10 @@ def LRE_index(weight, Lk, wbits):
     return new_weight
 
 def LRE_compression(weight, OUrow, OUcol):
-    print("Original_weight_shape::")
-    print(weight.shape)
+    #(27,128)
+    #print("weight.shape: ", weight.shape)
     compressed_col = 0 #OU size col
+    compressed_col_eachOU = np.zeros((math.ceil(weight.shape[0]/OUrow)))
     for i in range(math.floor(weight.shape[0]/OUrow)):
         for j in range(math.floor(weight.shape[1]/OUcol)):
             ou_matrix = np.empty((OUrow, OUcol))
@@ -327,7 +328,8 @@ def LRE_compression(weight, OUrow, OUcol):
                     verify += ou_matrix[n][m]
                     #print(ou_matrix[n][m])
                 if(verify == 0):
-                    compressed_col+=1
+                    compressed_col += 1
+                    compressed_col_eachOU[i] += 1
                     #print("Compressed!")
     x = math.floor(weight.shape[0]/OUrow)
     
@@ -342,23 +344,24 @@ def LRE_compression(weight, OUrow, OUcol):
                 #print("small_compressed")
     print("===========================================")
     print("LWS")
-    print("compressed_col(OUcol_size):")
-    print(compressed_col)
+    print("compressed_col(OUcol_size): ",compressed_col)
     if(weight.shape[0]-x*OUrow > 0):
-        print("rest_compressed_col(col)")
-        print(small_compressed_col)
+        compressed_col_eachOU[math.ceil(weight.shape[0]/OUrow)-1] = small_compressed_col
+        print("rest_compressed_col(col): ",small_compressed_col)
+    print("compressed_col_eachOU: ",compressed_col_eachOU)
     print("===========================================")
-    return compressed_col
+    return compressed_col_eachOU
 
 def RWS_compression(weight, OUrow, OUcol):
     compressed_col = 0
+    compressed_col_eachOU = np.zeros((math.ceil(weight.shape[0]/OUrow)))
     x=math.floor(weight.shape[0]/OUrow)
     y=math.floor(weight.shape[1]/OUcol)
     #record = np.empty(2**OUrow)
     record = np.zeros((x,2**OUrow))
-    print("weight.shape")
-    print(x)
-    print(y)
+    # print("weight.shape")
+    # print(x)
+    # print(y)
     for i in range(math.floor(weight.shape[0]/OUrow)):
         for j in range(math.floor(weight.shape[1]/OUcol)):
             ou_matrix = np.empty((OUrow, OUcol))
@@ -378,6 +381,7 @@ def RWS_compression(weight, OUrow, OUcol):
                         print("something error qq")
                     if(record[i][int(col_weight)]==1):
                         compressed_col+=1
+                        compressed_col_eachOU[i]+=1
                         #print("compressed!")
                     else:
                         record[i][int(col_weight)]=1
@@ -400,13 +404,13 @@ def RWS_compression(weight, OUrow, OUcol):
                     small_compressed_col +=1
     print("===========================================")
     print("RWS")
-    print("compressed_col:")
-    print(compressed_col)
+    print("compressed_col: ",compressed_col)
     if(num > 0):
-        print("rest_compressed_col(col)")
-        print(small_compressed_col)
+        compressed_col_eachOU[math.ceil(weight.shape[0]/OUrow)-1] = small_compressed_col
+        print("rest_compressed_col(col): ",small_compressed_col)
+    print("compressed_col_eachOU: ",compressed_col_eachOU)
     print("===========================================")
-    return compressed_col
+    return compressed_col_eachOU
 #
 def RIS_compression(activation, OUrow, OUcol):######不同OU間重複的要分開考慮######
     # print("ac.shape")
@@ -414,6 +418,7 @@ def RIS_compression(activation, OUrow, OUcol):######不同OU間重複的要分�
     x = math.floor(activation.shape[0]/OUrow)
     y = math.floor(activation.shape[1]/OUcol)
     compressed_input = 0
+    compressed_input_eachOU = np.zeros(math.ceil(activation.shape[0]/OUcol))
     record = np.zeros((x,y,2**OUrow))
     #(27, 8192)
     #(144, 8192)
@@ -427,16 +432,36 @@ def RIS_compression(activation, OUrow, OUcol):######不同OU間重複的要分�
                     col_activation += int(activation[ind_x][ind_y])*(2**l)
                 if(record[j][i][int(col_activation)] == 1):
                     compressed_input +=1
+                    compressed_input_eachOU[j] += 1
 
                 else:
                     record[j][i][int(col_activation)] = 1
                     #print("activation compressed")
     print("===========================================")
     print("RIS")
-    print("compressed_activations")
-    print(compressed_input)
+    print("compressed_activations: ",compressed_input)
+    num = activation.shape[0] -x*OUrow
+    if(num > 0):
+        record_rest = np.zeros((y, 2**num))
+        small_compressed_col = 0
+        for i in range(math.floor(activation.shape[1]/OUrow)):
+            for j in range(OUrow):
+                col_activation=0
+                for k in range(num):
+                    ind_x = OUrow*i + j 
+                    ind_y = x*OUrow + k
+                    col_activation += int(activation[ind_y][ind_x])*(2**k)
+                if (record_rest[i][int(col_activation)] == 1):
+                    small_compressed_col += 1
+                else:
+                    record_rest[i][int(col_activation)] = 1
+        compressed_input_eachOU[math.ceil(activation.shape[0]/OUcol)-1] = small_compressed_col
+        print("rest_compressed_col(col): ",small_compressed_col)
+    print("compressed_input_eachOU: ",compressed_input_eachOU)
     print("===========================================")
-    return compressed_input
+
+
+    return compressed_input_eachOU
 
 def float2bin(target, bits):
     new_bin = np.empty(bits)
@@ -446,15 +471,30 @@ def float2bin(target, bits):
         target = target % (2**(bits-1-i))
     return new_bin
 def cal_OUcycle(input, weight, OUrow, OUcol, lre_compressed_col, rws_compressed_col, ris_compressed_col):
-    OUx = math.floor(weight.shape[0]/OUrow)
-    OUy = math.floor(weight.shape[1]/OUcol)
-    acx = math.floor(input.shape[0]/OUrow)
-    acy = math.floor(input.shape[1]/OUcol)
-    OUcolnum = weight.shape[0]*OUy - lre_compressed_col - rws_compressed_col
-    OUcycle = math.ceil(OUcolnum / OUcol)
-    accycle = input.shape[1]*acx - ris_compressed_col
-    accycle = math.ceil(accycle / OUcol)
-    return OUcycle*accycle
+    #(27,8192)
+    #(128,27)
+    input = input.transpose()
+    #(8192,27)
+    #(128,27)
+    ax = input.shape[0]
+    ay = input.shape[1]
+    wx = weight.shape[0]
+    wy = weight.shape[1]
+    totalW = np.zeros(math.ceil(weight.shape[1]/OUrow))
+    totalA = np.zeros(math.ceil(weight.shape[1]/OUrow))
+    final = 0
+    if(lre_compressed_col == []):
+        lre_compressed_col = np.zeros(math.ceil(weight.shape[1]/OUrow))
+    if(rws_compressed_col == []):
+        rws_compressed_col = np.zeros(math.ceil(weight.shape[1]/OUrow))
+    if(ris_compressed_col == []):
+        ris_compressed_col = np.zeros(math.ceil(weight.shape[1]/OUrow))
+
+    for i in range(math.ceil(weight.shape[1]/OUrow)):
+        totalW[i] = wx - lre_compressed_col[i] - rws_compressed_col[i]
+        totalA[i] = ax - ris_compressed_col[i]
+        final += (totalW[i]*totalA[i])
+    return final
 def write_matrix_activation_conv(input_matrix,fill_dimension,length,filename):
     #(27,1024*8=8192)
     #(144,1024*8=8192)

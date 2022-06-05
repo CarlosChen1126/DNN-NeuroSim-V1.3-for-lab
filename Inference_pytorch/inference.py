@@ -42,6 +42,8 @@ parser.add_argument('--wl_weight', default=8)
 parser.add_argument('--wl_grad', default=8)
 parser.add_argument('--wl_activate', default=8)
 parser.add_argument('--wl_error', default=8)
+parser.add_argument('--OUrow', default=8)
+parser.add_argument('--OUcol', default=8)
 # Hardware Properties
 # if do not consider hardware effects, set inference=0
 parser.add_argument('--inference', default=0,
@@ -158,6 +160,7 @@ criterion = torch.nn.CrossEntropyLoss()
 # criterion = wage_util.SSE()
 
 # for data, target in test_loader:
+
 for i, (data, target) in enumerate(test_loader):
     if i == 0:
         hook_handle_list = hook.hardware_evaluation(

@@ -14,6 +14,7 @@ def Neural_Sim(self, input, output):
     global model_n, FP
 
     print("quantize layer ", self.name)
+
     input_file_name =  './layer_record_' + str(model_n) + '/input' + str(self.name) + '.csv'
     weight_file_name =  './layer_record_' + str(model_n) + '/weight' + str(self.name) + '.csv'
     f = open('./layer_record_' + str(model_n) + '/trace_command.sh', "a")
@@ -23,7 +24,10 @@ def Neural_Sim(self, input, output):
     else:
         #要改dnn-gating的話改這
         weight_q = wage_quantizer.Q(self.weight,self.wl_weight)
-    new_weight = trans(weight_q, 8)
+    weight = (weight_q + 1) * ((2**7)-1)
+    #weight = torch.clamp(weight_q,0 ,127)
+    int_weight2D = write_matrix_weight_mm(weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_modified_'+'.csv')
+    new_weight = trans(int_weight2D, 8)
     Lk = LRE_2D(new_weight, 8)
     #(16*8,27)
     #new_weight_2D = write_matrix_weight_m(new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_cellBit1_'+'.csv')
@@ -31,8 +35,9 @@ def Neural_Sim(self, input, output):
     new_new_weight = LRE_index(new_weight, Lk, 8)
     #new_weight = booltoint(new_weight, 8)
     #new_new_weight = booltoint(new_new_weight)
-    weight = (weight_q + 1) * (2**7)
-    write_matrix_weight_mm(weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_modified_'+'.csv')
+    # weight = (weight_q + 1) * ((2**7)-1)
+    # #weight = torch.clamp(weight_q,0 ,127)
+    # write_matrix_weight_mm(weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_modified_'+'.csv')
     
     new_weight = write_matrix_weight_m(new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_cellBit1_'+'.csv')
     new_new_weight = write_matrix_weight_mmm(new_new_weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_after_LRE'+'.csv')
@@ -43,9 +48,9 @@ def Neural_Sim(self, input, output):
     rws_compressed_col = []
     lre_compressed_col = []
     ris_compressed_col = []
-    #LRE_compression(new_weight.transpose(), 8, 8)
+
     lre_compressed_col = LRE_compression(new_new_weight.transpose(), 8, 8)
-    #rws_compressed_col = RWS_compression(new_weight.transpose(), 8, 8)
+    rws_compressed_col = RWS_compression(new_new_weight.transpose(), 8, 8)
 
     write_matrix_weight(weight_q.cpu().data.numpy(),weight_file_name)
     if len(self.weight.shape) > 2:
@@ -59,6 +64,7 @@ def Neural_Sim(self, input, output):
     cycle = cal_OUcycle(activation_2D, new_weight, 8, 8, [], [], [])
     new_cycle = cal_OUcycle(activation_2D, new_weight, 8, 8, lre_compressed_col, rws_compressed_col, ris_compressed_col)
     print("===================================================")
+    print("layer ", str(self.name))
     print("MVM_cycle(original) : ", cycle)
     print("Use the compressed algorithm:")
     if(lre_compressed_col != []):
@@ -70,6 +76,19 @@ def Neural_Sim(self, input, output):
     print("MVM_cycle(after_compressed) : ", new_cycle)
     print("compressed_ratio : ", (cycle-new_cycle)*100/cycle, "%")
     print("===================================================")
+    with open("VGG8_experiment(LRE).txt", "a") as file:
+        file.write("layer " + str(self.name)+"\n")
+        file.write("MVM_cycle(original) : "+ str(cycle)+"\n")
+        file.write("Use the compressed algorithm:")
+        if(lre_compressed_col != []):
+            file.write(" LRE ")
+        if(rws_compressed_col != []):
+            file.write(" RWS ")
+        if(ris_compressed_col != []):
+            file.write(" RIS ")
+        file.write("\n"+"MVM_cycle(after_compressed) : " + str(new_cycle)+"\n")
+        file.write("compressed_ratio : "+ str((cycle-new_cycle)*100/cycle) +"%\n")
+        file.write("===================================================\n")
 #0 1 format(cell format)
 def write_matrix_weight_m(input_matrix,filename):
     input_matrix = input_matrix.transpose()
@@ -82,16 +101,17 @@ def write_matrix_weight_mmm(input_matrix,filename):
     return input_matrix.transpose()
 #int format
 def write_matrix_weight_mm(input_matrix,filename):
-    D = input_matrix.shape[1]
-    new_weight_matrix = np.empty((input_matrix.shape[0], input_matrix.shape[1]*input_matrix.shape[2]*input_matrix.shape[3]))
-    for i in range(input_matrix.shape[2]):
-        for j in range(input_matrix.shape[3]):
-            for k in range(input_matrix.shape[1]):
-                cout_y = D*3*i+D*j+k
+    #(16,3,3,3)
+    D = input_matrix.shape[2] #3
+    new_weight_matrix = np.empty((input_matrix.shape[1]*input_matrix.shape[2]*input_matrix.shape[3],input_matrix.shape[0]))
+    for k in range(input_matrix.shape[1]):
+        for i in range(input_matrix.shape[2]):
+            for j in range(input_matrix.shape[3]):
+                cout_y = D*D*k+D*i+j
                 for l in range(input_matrix.shape[0]):
-                        new_weight_matrix[l][cout_y] = input_matrix[l][k][i][j] 
-    new_weight_matrix = new_weight_matrix.transpose()
+                    new_weight_matrix[cout_y][l] = input_matrix[l][k][i][j]
     np.savetxt(filename, new_weight_matrix, delimiter=",",fmt='%d')
+    return new_weight_matrix
 def write_matrix_weight(input_matrix,filename):
     cout = input_matrix.shape[0]
     weight_matrix = input_matrix.reshape(cout,-1).transpose()
@@ -272,21 +292,22 @@ def booltoint(weight, bits):
                 new_weight[x][y] = int(0)
     return new_weight
 def trans(input_matrix, bits):
-    weight = (input_matrix + 1) * (2**(int(bits)-1))
-    D = input_matrix.shape[1]
-    new_weight_matrix = np.empty((input_matrix.shape[0], input_matrix.shape[1]*input_matrix.shape[2]*input_matrix.shape[3]))
-    for i in range(input_matrix.shape[2]):
-        for j in range(input_matrix.shape[3]):
-            for k in range(input_matrix.shape[1]):
-                cout_y = D*3*i+D*j+k
-                for l in range(input_matrix.shape[0]):
-                        new_weight_matrix[l][cout_y] = weight[l][k][i][j] 
+    # weight = (input_matrix + 1) * (2**(int(bits)-1))
+    # D = input_matrix.shape[2]
+    # new_weight_matrix = np.empty((input_matrix.shape[0], input_matrix.shape[1]*input_matrix.shape[2]*input_matrix.shape[3]))
+    # for k in range(input_matrix.shape[1]):
+    #     for i in range(input_matrix.shape[2]):
+    #         for j in range(input_matrix.shape[3]):
+    #             cout_y = D*D*k+D*i+j
+    #             for l in range(input_matrix.shape[0]):
+    #                 new_weight_matrix[l][cout_y] = weight[l][k][i][j]
     # weight.shape:
     #(N,D,K,K)
     #(16,3,3,3)
     #(16,16,3,3)
     #(32,16,3,3)
     #(32,32,3,3)
+    new_weight_matrix = input_matrix.transpose()
     new_weight = np.empty((new_weight_matrix.shape[0]*int(bits), new_weight_matrix.shape[1]))
     for x in range(new_weight_matrix.shape[0]):
         for y in range(new_weight_matrix.shape[1]):
@@ -359,6 +380,8 @@ def RWS_compression(weight, OUrow, OUcol):
     y=math.floor(weight.shape[1]/OUcol)
     #record = np.empty(2**OUrow)
     record = np.zeros((x,2**OUrow))
+    record_rep = np.zeros((x,2**OUrow))
+    record_repp = np.zeros((x,2**OUrow))
     # print("weight.shape")
     # print(x)
     # print(y)
@@ -380,11 +403,19 @@ def RWS_compression(weight, OUrow, OUcol):
                     if(col_weight > 255):
                         print("something error qq")
                     if(record[i][int(col_weight)]==1):
+                        record_rep[i][int(col_weight)] += 1
+                        record_repp[i][int(col_weight)] += 1
                         compressed_col+=1
                         compressed_col_eachOU[i]+=1
                         #print("compressed!")
                     else:
                         record[i][int(col_weight)]=1
+                        record_rep[i][int(col_weight)] += 1
+        print("compressed_col_each: ",compressed_col_eachOU[i])
+        print(record_rep[i])
+        print(record_repp[i])
+        print(record_rep[i].sum())
+        print(record_repp[i].sum())
     x = math.floor(weight.shape[0]/OUrow)
     num = weight.shape[0] -x*OUrow
     if(num > 0):
@@ -413,7 +444,7 @@ def RWS_compression(weight, OUrow, OUcol):
     return compressed_col_eachOU
 #
 def RIS_compression(activation, OUrow, OUcol):######不同OU間重複的要分開考慮######
-    # print("ac.shape")
+    print("ac.shape ", activation.shape)
     # print(activation.shape)
     x = math.floor(activation.shape[0]/OUrow)
     y = math.floor(activation.shape[1]/OUcol)
@@ -498,6 +529,7 @@ def cal_OUcycle(input, weight, OUrow, OUcol, lre_compressed_col, rws_compressed_
 def write_matrix_activation_conv(input_matrix,fill_dimension,length,filename):
     #(27,1024*8=8192)
     #(144,1024*8=8192)
+    print("-----------------: ",input_matrix.shape)
     filled_matrix_b = np.zeros([input_matrix.shape[2],input_matrix.shape[1]*length],dtype=np.str)
     filled_matrix_bin,scale = dec2bin(input_matrix[0,:],length)
     for i,b in enumerate(filled_matrix_bin):
@@ -524,7 +556,11 @@ def stretch_input(input_matrix,window_size = 5,padding=(0,0),stride=(1,1)):
 
     #item_num = ((input_shape[2] + 2*padding[0] - window_size) / stride[0] + 1) * ((input_shape[3] + 2*padding[1] - window_size) / stride[1] + 1)
     item_num = int((input_shape[2] + 2*padding[0] - window_size) / stride[0] + 1) * int((input_shape[3] + 2*padding[1] - window_size) / stride[1] + 1)
-   # print('item_num = {}'.format(item_num))
+    print(input_shape[2])
+    print(input_shape[3])
+    print((input_shape[2] + 2*padding[0] - window_size) / stride[0] + 1)
+    print((input_shape[3] + 2*padding[1] - window_size) / stride[1] + 1)
+    print('item_num = {}'.format(item_num))
     output_matrix = np.zeros((input_shape[0],int(item_num),input_shape[1]*window_size*window_size))
     iter = 0
     for i in range(0, input_shape[2]-window_size + 1, stride[0]):

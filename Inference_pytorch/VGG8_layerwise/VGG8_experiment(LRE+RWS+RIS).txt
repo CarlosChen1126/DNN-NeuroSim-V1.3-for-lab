@@ -1,0 +1,37 @@
+Vgg8
+layer Conv0_
+MVM_cycle(original) : 33554432.0
+Use the compressed algorithm: LRE  RWS  RIS 
+MVM_cycle(after_compressed) : 4696324.0
+compressed_ratio : 86.00386381149292%
+===================================================
+layer Conv1_
+MVM_cycle(original) : 1207959552.0
+Use the compressed algorithm: LRE  RWS  RIS 
+MVM_cycle(after_compressed) : 134651638.0
+compressed_ratio : 88.85296798414655%
+===================================================
+layer Conv3_
+MVM_cycle(original) : 603979776.0
+Use the compressed algorithm: LRE  RWS  RIS 
+MVM_cycle(after_compressed) : 28617159.0
+compressed_ratio : 95.2619011203448%
+===================================================
+layer Conv4_
+MVM_cycle(original) : 1207959552.0
+Use the compressed algorithm: LRE  RWS  RIS 
+MVM_cycle(after_compressed) : 42546280.0
+compressed_ratio : 96.47783901956346%
+===================================================
+layer Conv6_
+MVM_cycle(original) : 603979776.0
+Use the compressed algorithm: LRE  RWS  RIS 
+MVM_cycle(after_compressed) : 9409065.0
+compressed_ratio : 98.44215561946233%
+===================================================
+layer Conv7_
+MVM_cycle(original) : 1207959552.0
+Use the compressed algorithm: LRE  RWS  RIS 
+MVM_cycle(after_compressed) : 15245581.0
+compressed_ratio : 98.73790633347299%
+===================================================

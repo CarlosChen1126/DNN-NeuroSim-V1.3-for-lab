@@ -233,6 +233,7 @@ class QConv2d(nn.Conv2d):
                 output, self.ADCprecision)
         else:
             # original WAGE QCov2d
+            ####compression mask####
             weight1 = self.weight * self.scale + \
                 (self.weight - self.weight * self.scale).detach()
             weight = weight1 + \

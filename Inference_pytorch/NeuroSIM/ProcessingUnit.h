@@ -56,7 +56,6 @@ vector<vector<double> > CopySubArray(const vector<vector<double> > &orginal, int
 vector<vector<double> > CopySubInput(const vector<vector<double> > &orginal, int positionRow, int numInputVector, int numRow);
 vector<double> GetInputVector(const vector<vector<double> > &input, int numInput, double *activityRowRead);
 vector<double> GetColumnResistance(const vector<double> &input, const vector<vector<double> > &weight, MemCell& cell, bool parallelRead, double resCellAccess);
-vector<double> GetColumnResistanceM(const vector<double> &input, const vector<vector<double> > &weight, MemCell& cell, bool parallelRead, double resCellAccess, double OUcol, double OUrow);
 
 
 #endif /* PROCESSINGUNIT_H_ */

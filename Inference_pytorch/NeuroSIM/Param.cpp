@@ -76,11 +76,15 @@ Param::Param() {
 								// true: SRAM
 	globalBufferCoreSizeRow = 128;
 	globalBufferCoreSizeCol = 128;
+	// globalBufferCoreSizeRow = 256;
+	// globalBufferCoreSizeCol = 256;
 	
 	tileBufferType = false;      // false: register file
 								// true: SRAM
 	tileBufferCoreSizeRow = 32;
 	tileBufferCoreSizeCol = 32;
+	// tileBufferCoreSizeRow = 64;
+	// tileBufferCoreSizeCol = 64;
 	
 	peBufferType = false;        // false: register file
 								// true: SRAM
@@ -91,7 +95,7 @@ Param::Param() {
 	reLu = true;                // false: sigmoid
 								// true: reLu
 								
-	novelMapping = true;        // false: conventional mapping
+	novelMapping = false;        // false: conventional mapping
 								// true: novel mapping
 								
 	SARADC = false;              // false: MLSA
@@ -101,7 +105,7 @@ Param::Param() {
 	
 	pipeline = false;            // false: layer-by-layer process --> huge leakage energy in HP
 								// true: pipeline process
-	speedUpDegree = 8;          // 1 = no speed up --> original speed
+	speedUpDegree = 1;          // 1 = no speed up --> original speed
 								// 2 and more : speed up ratio, the higher, the faster
 								// A speed-up degree upper bound: when there is no idle period during each layer --> no need to further fold the system clock
 								// This idle period is defined by IFM sizes and data flow, the actual process latency of each layer may be different due to extra peripheries
@@ -115,8 +119,6 @@ Param::Param() {
 	/*** algorithm weight range, the default wrapper (based on WAGE) has fixed weight range of (-1, 1) ***/
 	algoWeightMax = 1;
 	algoWeightMin = -1;
-	// algoWeightMax = -128;
-	// algoWeightMin = 128;
 	
 	/*** conventional hardware design options ***/
 	clkFreq = 1e9;                      // Clock frequency
@@ -141,18 +143,16 @@ Param::Param() {
 
 	numRowSubArray = 128;               // # of rows in single subArray
 	numColSubArray = 128;               // # of columns in single subArray
-	//numRowSubArray = 16;               // # of rows in single subArray
-        //numColSubArray = 16;               // # of columns in single subArray
+
+
 	/*** option to relax subArray layout ***/
 	relaxArrayCellHeight = 0;           // relax ArrayCellHeight or not
 	relaxArrayCellWidth = 0;            // relax ArrayCellWidth or not
 	
-	//numColMuxed = 32;                    // How many columns share 1 ADC (for eNVM and FeFET) or parallel SRAM
-	numColMuxed = 4;
-	//numColSubArray/numColMuxed=OU size
-	//levelOutput = 32;
-	levelOutput = 32;                   // # of levels of the multilevelSenseAmp output, should be in 2^N forms; e.g. 32 levels --> 5-bit ADC (ADC resolution) 
-	cellBit = 1;// precision of memory device 
+	numColMuxed = 8;                    // How many columns share 1 ADC (for eNVM and FeFET) or parallel SRAM
+	levelOutput = 32;                   // # of levels of the multilevelSenseAmp output, should be in 2^N forms; e.g. 32 levels --> 5-bit ADC
+	//levelOutput = 8; 
+	cellBit = 1;                        // precision of memory device 
 	
 	/*** parameters for SRAM ***/
 	// due the scaling, suggested SRAM cell size above 22nm: 160F^2

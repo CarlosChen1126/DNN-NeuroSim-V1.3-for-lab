@@ -90,11 +90,15 @@ void Adder::CalculateArea(double _newHeight, double _newWidth, AreaModify _optio
 		} else if (_newWidth && _option==NONE) { // Adder in multiple rows given the total width
 			hAdder = hNand * numBit;
 			wAdder = wNand * 9;
-			
+			// cout<<"wAdder: "<<wAdder<<endl;
+			// cout<<"_newWidth: "<<_newWidth<<endl;
 			if (wAdder > _newWidth) {
-				cout<<wAdder<<endl;
-				cout<<_newWidth<<endl;
 				cout << "[Adder] Error: A single adder width is even larger than the assigned width ! " << endl;
+				//wAdder = 2.2572e-06
+				//_newWidth = 2.112e-06
+				//33.792e-06
+				// cout<<"wAdder: "<<wAdder<<endl;
+				// cout<<"_newWidth: "<<_newWidth<<endl;
 			} else {
 				width = _newWidth;
 				height = wAdder * hAdder * numAdder / _newWidth;

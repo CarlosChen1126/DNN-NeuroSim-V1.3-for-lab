@@ -329,7 +329,8 @@ vector<double> TileCalculateArea(double numPE, double peSize, bool NMTile, doubl
 		areaResults.push_back(PEareaOther*numPE + inputBufferCM->area + outputBufferCM->area + areareLu + areasigmoid);
 		areaResults.push_back(PEareaArray*numPE);
 	}
-	
+	//TEST
+	//subArrayInPE->PrintProperty();
 	return areaResults;
 }
 

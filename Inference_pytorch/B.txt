@@ -1,0 +1,4466 @@
+log/default/ADCprecision=5/OUcol=8/OUrow=8/batch_size=500/cellBit=4/dataset=cifar10/decreasing_lr=140,180/detect=0/grad_scale=8/inference=1/lr=0.01/mode=WAGE/model=ResNet20/onoffratio=10/seed=117/subArray=128/t=0/target=0/v=0/vari=0/wl_activate=8/wl_error=8/wl_grad=8/wl_weight=8
+Building CIFAR-10 data loader with 1 workers
+Files already downloaded and verified
+Files already downloaded and verified
+fan_in     27, float_limit 0.333333, float std 0.272166, quant limit 1.5, scale 4
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    144, float_limit 0.144338, float std 0.117851, quant limit 1.5, scale 8
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    288, float_limit 0.102062, float std 0.083333, quant limit 1.5, scale 16
+fan_in    576, float_limit 0.072169, float std 0.058926, quant limit 1.5, scale 16
+fan_in    576, float_limit 0.072169, float std 0.058926, quant limit 1.5, scale 16
+fan_in    576, float_limit 0.072169, float std 0.058926, quant limit 1.5, scale 16
+fan_in    576, float_limit 0.072169, float std 0.058926, quant limit 1.5, scale 16
+fan_in    576, float_limit 0.072169, float std 0.058926, quant limit 1.5, scale 16
+fan_in     64, float_limit 0.216506, float std 0.176777, quant limit 1.5, scale 8
+ResNet_CIFAR(
+  (conv1): QConv2d(3, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (bn1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (layer1): Sequential(
+    (0): BasicBlock_CIFAR(
+      (conv1): QConv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): QConv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU()
+      (shortcut): Sequential()
+    )
+    (1): BasicBlock_CIFAR(
+      (conv1): QConv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): QConv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU()
+      (shortcut): Sequential()
+    )
+    (2): BasicBlock_CIFAR(
+      (conv1): QConv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): QConv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU()
+      (shortcut): Sequential()
+    )
+  )
+  (layer2): Sequential(
+    (0): BasicBlock_CIFAR(
+      (conv1): QConv2d(16, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): QConv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU()
+      (shortcut): LambdaLayer()
+    )
+    (1): BasicBlock_CIFAR(
+      (conv1): QConv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): QConv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU()
+      (shortcut): Sequential()
+    )
+    (2): BasicBlock_CIFAR(
+      (conv1): QConv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): QConv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU()
+      (shortcut): Sequential()
+    )
+  )
+  (layer3): Sequential(
+    (0): BasicBlock_CIFAR(
+      (conv1): QConv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): QConv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU()
+      (shortcut): LambdaLayer()
+    )
+    (1): BasicBlock_CIFAR(
+      (conv1): QConv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): QConv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU()
+      (shortcut): Sequential()
+    )
+    (2): BasicBlock_CIFAR(
+      (conv1): QConv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): QConv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU()
+      (shortcut): Sequential()
+    )
+  )
+  (linear): QLinear(in_features=64, out_features=10, bias=False)
+  (relu): ReLU()
+)
+------------------------------ FloorPlan --------------------------------
+
+Tile and PE size are optimized to maximize memory utilization ( = memory mapped by synapse / total memory on chip)
+
+Desired Conventional Mapped Tile Storage Size: 512x512
+Desired Conventional PE Storage Size: 256x256
+Desired Novel Mapped Tile Storage Size: 9x512x512
+User-defined SubArray Size: 128x128
+
+----------------- # of tile used for each layer -----------------
+layer1: 1
+layer2: 1
+layer3: 1
+layer4: 1
+layer5: 1
+layer6: 1
+layer7: 1
+layer8: 1
+layer9: 1
+layer10: 1
+layer11: 1
+layer12: 1
+layer13: 1
+layer14: 1
+layer15: 1
+layer16: 1
+layer17: 1
+layer18: 1
+layer19: 1
+layer20: 1
+
+----------------- Speed-up of each layer ------------------
+layer1: 16
+layer2: 16
+layer3: 16
+layer4: 16
+layer5: 16
+layer6: 16
+layer7: 16
+layer8: 8
+layer9: 8
+layer10: 8
+layer11: 8
+layer12: 8
+layer13: 8
+layer14: 4
+layer15: 4
+layer16: 4
+layer17: 4
+layer18: 4
+layer19: 4
+layer20: 16
+
+----------------- Utilization of each layer ------------------
+layer1: 0.210938
+layer2: 0.125
+layer3: 0.125
+layer4: 0.125
+layer5: 0.125
+layer6: 0.125
+layer7: 0.125
+layer8: 0.125
+layer9: 0.25
+layer10: 0.25
+layer11: 0.25
+layer12: 0.25
+layer13: 0.25
+layer14: 0.25
+layer15: 0.5
+layer16: 0.5
+layer17: 0.5
+layer18: 0.5
+layer19: 0.5
+layer20: 0.3125
+Memory Utilization of Whole Chip: 26.9922 % 
+
+---------------------------- FloorPlan Done ------------------------------
+
+
+
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+-------------------------------------- Hardware Performance --------------------------------------
+-------------------- Estimation of Layer 1 ----------------------
+layer1's readLatency is: 76901.3ns
+layer1's readDynamicEnergy is: 423485pJ
+layer1's leakagePower is: 4.19357uW
+layer1's leakageEnergy is: 6127.33pJ
+layer1's buffer latency is: 55907.7ns
+layer1's buffer readDynamicEnergy is: 6670.56pJ
+layer1's ic latency is: 5242.84ns
+layer1's ic readDynamicEnergy is: 71406.3pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 7340.13ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 8257.64ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 61303.5ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 255617pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 43317.3pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 124551pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 2 ----------------------
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+layer2's readLatency is: 83170.5ns
+layer2's readDynamicEnergy is: 2.10361e+06pJ
+layer2's leakagePower is: 33.1089uW
+layer2's leakageEnergy is: 52320.1pJ
+layer2's buffer latency is: 45591.9ns
+layer2's buffer readDynamicEnergy is: 23918.9pJ
+layer2's ic latency is: 7147.68ns
+layer2's ic readDynamicEnergy is: 481971pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 7340.13ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 22937.9ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 52892.5ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 803446pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 413625pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 886540pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 3 ----------------------
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+layer3's readLatency is: 83170.5ns
+layer3's readDynamicEnergy is: 2.10521e+06pJ
+layer3's leakagePower is: 33.1089uW
+layer3's leakageEnergy is: 52320.1pJ
+layer3's buffer latency is: 45591.9ns
+layer3's buffer readDynamicEnergy is: 23918.9pJ
+layer3's ic latency is: 7147.68ns
+layer3's ic readDynamicEnergy is: 481971pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 7340.13ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 22937.9ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 52892.5ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 805081pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 413625pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 886500pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 4 ----------------------
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+layer4's readLatency is: 83170.5ns
+layer4's readDynamicEnergy is: 2.29855e+06pJ
+layer4's leakagePower is: 33.1089uW
+layer4's leakageEnergy is: 52320.1pJ
+layer4's buffer latency is: 45591.9ns
+layer4's buffer readDynamicEnergy is: 23918.9pJ
+layer4's ic latency is: 7147.68ns
+layer4's ic readDynamicEnergy is: 481971pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 7340.13ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 22937.9ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 52892.5ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 988611pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 413625pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 896310pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 5 ----------------------
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+layer5's readLatency is: 83170.5ns
+layer5's readDynamicEnergy is: 1.89471e+06pJ
+layer5's leakagePower is: 33.1089uW
+layer5's leakageEnergy is: 52320.1pJ
+layer5's buffer latency is: 45591.9ns
+layer5's buffer readDynamicEnergy is: 23918.9pJ
+layer5's ic latency is: 7147.68ns
+layer5's ic readDynamicEnergy is: 481971pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 7340.13ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 22937.9ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 52892.5ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 605307pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 413625pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 875775pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 6 ----------------------
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+layer6's readLatency is: 83170.5ns
+layer6's readDynamicEnergy is: 2.48263e+06pJ
+layer6's leakagePower is: 33.1089uW
+layer6's leakageEnergy is: 52320.1pJ
+layer6's buffer latency is: 45591.9ns
+layer6's buffer readDynamicEnergy is: 23918.9pJ
+layer6's ic latency is: 7147.68ns
+layer6's ic readDynamicEnergy is: 481971pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 7340.13ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 22937.9ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 52892.5ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 1.16328e+06pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 413625pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 905725pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 7 ----------------------
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 128
+numRowMatrix: 16
+numColMatrix: 128
+layer7's readLatency is: 83170.5ns
+layer7's readDynamicEnergy is: 1.85985e+06pJ
+layer7's leakagePower is: 33.1089uW
+layer7's leakageEnergy is: 52320.1pJ
+layer7's buffer latency is: 45591.9ns
+layer7's buffer readDynamicEnergy is: 23918.9pJ
+layer7's ic latency is: 7147.68ns
+layer7's ic readDynamicEnergy is: 481971pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 7340.13ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 22937.9ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 52892.5ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 572094pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 413625pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 874129pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 8 ----------------------
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+1 8
+weightMatrixRow 16
+weightMatrixCol 256
+numRowMatrix: 16
+numColMatrix: 128
+layer8's readLatency is: 27567.4ns
+layer8's readDynamicEnergy is: 1.22081e+06pJ
+layer8's leakagePower is: 33.1089uW
+layer8's leakageEnergy is: 17341.8pJ
+layer8's buffer latency is: 13905ns
+layer8's buffer readDynamicEnergy is: 9692.43pJ
+layer8's ic latency is: 2116.01ns
+layer8's ic readDynamicEnergy is: 147228pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 3670.06ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 7798.89ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 16098.4ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 658916pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 200870pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 361021pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 9 ----------------------
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+layer9's readLatency is: 33087.1ns
+layer9's readDynamicEnergy is: 948047pJ
+layer9's leakagePower is: 33.1089uW
+layer9's leakageEnergy is: 20814.1pJ
+layer9's buffer latency is: 19911.7ns
+layer9's buffer readDynamicEnergy is: 10418.5pJ
+layer9's ic latency is: 3117.41ns
+layer9's ic readDynamicEnergy is: 210231pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 3197.03ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 6793.7ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 23096.4ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 384785pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 174980pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 388282pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 10 ----------------------
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+layer10's readLatency is: 33087.1ns
+layer10's readDynamicEnergy is: 938665pJ
+layer10's leakagePower is: 33.1089uW
+layer10's leakageEnergy is: 20814.1pJ
+layer10's buffer latency is: 19911.7ns
+layer10's buffer readDynamicEnergy is: 10418.5pJ
+layer10's ic latency is: 3117.41ns
+layer10's ic readDynamicEnergy is: 210231pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 3197.03ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 6793.7ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 23096.4ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 375867pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 174980pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 387818pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 11 ----------------------
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+layer11's readLatency is: 33087.1ns
+layer11's readDynamicEnergy is: 794473pJ
+layer11's leakagePower is: 33.1089uW
+layer11's leakageEnergy is: 20814.1pJ
+layer11's buffer latency is: 19911.7ns
+layer11's buffer readDynamicEnergy is: 10418.5pJ
+layer11's ic latency is: 3117.41ns
+layer11's ic readDynamicEnergy is: 210231pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 3197.03ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 6793.7ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 23096.4ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 239020pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 174980pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 380473pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 12 ----------------------
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+layer12's readLatency is: 33087.1ns
+layer12's readDynamicEnergy is: 947253pJ
+layer12's leakagePower is: 33.1089uW
+layer12's leakageEnergy is: 20814.1pJ
+layer12's buffer latency is: 19911.7ns
+layer12's buffer readDynamicEnergy is: 10418.5pJ
+layer12's ic latency is: 3117.41ns
+layer12's ic readDynamicEnergy is: 210231pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 3197.03ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 6793.7ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 23096.4ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 384045pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 174980pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 388228pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 13 ----------------------
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 256
+numRowMatrix: 32
+numColMatrix: 128
+layer13's readLatency is: 33087.1ns
+layer13's readDynamicEnergy is: 886867pJ
+layer13's leakagePower is: 33.1089uW
+layer13's leakageEnergy is: 20814.1pJ
+layer13's buffer latency is: 19911.7ns
+layer13's buffer readDynamicEnergy is: 10418.5pJ
+layer13's ic latency is: 3117.41ns
+layer13's ic readDynamicEnergy is: 210231pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 3197.03ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 6793.7ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 23096.4ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 326730pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 174980pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 385157pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 14 ----------------------
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+1 8
+weightMatrixRow 32
+weightMatrixCol 512
+numRowMatrix: 32
+numColMatrix: 128
+layer14's readLatency is: 11269.8ns
+layer14's readDynamicEnergy is: 457910pJ
+layer14's leakagePower is: 33.1089uW
+layer14's leakageEnergy is: 7089.51pJ
+layer14's buffer latency is: 6106.97ns
+layer14's buffer readDynamicEnergy is: 4207.51pJ
+layer14's ic latency is: 932.078ns
+layer14's ic readDynamicEnergy is: 64885.5pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 1598.52ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 2597.59ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 7073.71ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 217460pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 86196pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 154254pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 15 ----------------------
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+layer15's readLatency is: 11610.7ns
+layer15's readDynamicEnergy is: 338315pJ
+layer15's leakagePower is: 33.1089uW
+layer15's leakageEnergy is: 7303.95pJ
+layer15's buffer latency is: 7353.89ns
+layer15's buffer readDynamicEnergy is: 3820.64pJ
+layer15's ic latency is: 1149.5ns
+layer15's ic readDynamicEnergy is: 77542.6pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 1174.42ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 1908.43ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 8527.86ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 132533pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 63327.7pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 142455pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 16 ----------------------
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+layer16's readLatency is: 11610.7ns
+layer16's readDynamicEnergy is: 368513pJ
+layer16's leakagePower is: 33.1089uW
+layer16's leakageEnergy is: 7303.95pJ
+layer16's buffer latency is: 7353.89ns
+layer16's buffer readDynamicEnergy is: 3820.64pJ
+layer16's ic latency is: 1149.5ns
+layer16's ic readDynamicEnergy is: 77542.6pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 1174.42ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 1908.43ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 8527.86ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 161184pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 63327.7pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 144001pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 17 ----------------------
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+layer17's readLatency is: 11610.7ns
+layer17's readDynamicEnergy is: 391852pJ
+layer17's leakagePower is: 33.1089uW
+layer17's leakageEnergy is: 7303.95pJ
+layer17's buffer latency is: 7353.89ns
+layer17's buffer readDynamicEnergy is: 3820.64pJ
+layer17's ic latency is: 1149.5ns
+layer17's ic readDynamicEnergy is: 77542.6pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 1174.42ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 1908.43ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 8527.86ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 183329pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 63327.7pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 145195pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 18 ----------------------
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+layer18's readLatency is: 11610.7ns
+layer18's readDynamicEnergy is: 363113pJ
+layer18's leakagePower is: 33.1089uW
+layer18's leakageEnergy is: 7303.95pJ
+layer18's buffer latency is: 7353.89ns
+layer18's buffer readDynamicEnergy is: 3820.64pJ
+layer18's ic latency is: 1149.5ns
+layer18's ic readDynamicEnergy is: 77542.6pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 1174.42ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 1908.43ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 8527.86ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 156054pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 63327.7pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 143731pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 19 ----------------------
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+1 8
+weightMatrixRow 64
+weightMatrixCol 512
+numRowMatrix: 64
+numColMatrix: 128
+layer19's readLatency is: 10952.1ns
+layer19's readDynamicEnergy is: 342278pJ
+layer19's leakagePower is: 33.1089uW
+layer19's leakageEnergy is: 6889.66pJ
+layer19's buffer latency is: 6803.38ns
+layer19's buffer readDynamicEnergy is: 3811.28pJ
+layer19's ic latency is: 1035.32ns
+layer19's ic readDynamicEnergy is: 69233.4pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 1174.42ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 1908.43ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 7869.29ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 144160pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 63327.7pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 134790pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+-------------------- Estimation of Layer 20 ----------------------
+layer20's readLatency is: 108.949ns
+layer20's readDynamicEnergy is: 796.471pJ
+layer20's leakagePower is: 4.19357uW
+layer20's leakageEnergy is: 8.68086pJ
+layer20's buffer latency is: 77.4736ns
+layer20's buffer readDynamicEnergy is: 6.96803pJ
+layer20's ic latency is: 12.1061ns
+layer20's ic readDynamicEnergy is: 391.63pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 8.1557ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 9.17516ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 91.6186ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 290.96pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 48.1303pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 457.38pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+------------------------------ Summary --------------------------------
+
+ChipArea : 3.60635e+07um^2
+Chip total CIM array : 998781um^2
+Total IC Area on chip (Global and Tile/PE local): 8.63595e+06um^2
+Total ADC (or S/As and precharger for SRAM) Area on chip : 9.46807e+06um^2
+Total Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) on chip : 4.61276e+06um^2
+Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, pooling and activation units) : 1.23479e+07um^2
+
+Chip clock period is: 2.03892ns
+Chip layer-by-layer readLatency (per image) is: 837701ns
+Chip total readDynamicEnergy is: 2.11669e+07pJ
+Chip total leakage Energy is: 484664pJ
+Chip total leakage Power is: 604.348uW
+Chip buffer readLatency is: 485326ns
+Chip buffer readDynamicEnergy is: 235277pJ
+Chip ic readLatency is: 72409.5ns
+Chip ic readDynamicEnergy is: 4.60629e+06pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+----------- ADC (or S/As and precharger for SRAM) readLatency is : 78514.9ns
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readLatency is : 199801ns
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readLatency is : 559385ns
+----------- ADC (or S/As and precharger for SRAM) readDynamicEnergy is : 8.5578e+06pJ
+----------- Accumulation Circuits (subarray level: adders, shiftAdds; PE/Tile/Global level: accumulation units) readDynamicEnergy is : 4.00372e+06pJ
+----------- Other Peripheries (e.g. decoders, mux, switchmatrix, buffers, IC, pooling and activation units) readDynamicEnergy is : 8.60539e+06pJ
+
+************************ Breakdown of Latency and Dynamic Energy *************************
+
+
+----------------------------- Performance -------------------------------
+Energy Efficiency TOPS/W (Layer-by-Layer Process): 3.60621
+Throughput TOPS (Layer-by-Layer Process): 0.113713
+Throughput FPS (Layer-by-Layer Process): 1193.74
+Compute efficiency TOPS/mm^2 (Layer-by-Layer Process): 0.00315315
+-------------------------------------- Hardware Performance Done --------------------------------------
+
+------------------------------ Simulation Performance --------------------------------
+Total Run-time of NeuroSim: 12 seconds
+------------------------------ Simulation Performance --------------------------------
+quantize layer  Conv_0_
+quantize layer  Conv3x3_1_
+quantize layer  Conv3x3_2_
+quantize layer  Conv3x3_3_
+quantize layer  Conv3x3_4_
+quantize layer  Conv3x3_5_
+quantize layer  Conv3x3_6_
+quantize layer  Conv3x3_7_
+quantize layer  Conv3x3_8_
+quantize layer  Conv3x3_9_
+quantize layer  Conv3x3_10_
+quantize layer  Conv3x3_11_
+quantize layer  Conv3x3_12_
+quantize layer  Conv3x3_13_
+quantize layer  Conv3x3_14_
+quantize layer  Conv3x3_15_
+quantize layer  Conv3x3_16_
+quantize layer  Conv3x3_17_
+quantize layer  Conv3x3_18_
+quantize layer  FC_19_
+ --- Hardware Properties --- 
+subArray size: 
+128
+ADC precision: 
+5
+cell precision: 
+4
+on/off ratio: 
+10
+variation: 
+0
+Test set: 
+avg loss: 
+2.2003066539764404
+accuracy: 
+28.0

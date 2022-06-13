@@ -24,6 +24,7 @@ def Neural_Sim(self, input, output):
     else:
         #要改dnn-gating的話改這
         weight_q = wage_quantizer.Q(self.weight,self.wl_weight)
+    """
     weight = (weight_q + 1) * ((2**7)-1)
     #weight = torch.clamp(weight_q,0 ,127)
     int_weight2D = write_matrix_weight_mm(weight, './layer_record_modified' + str(model_n) + '/weight' + str(self.name) + '_modified_'+'.csv')
@@ -526,6 +527,7 @@ def cal_OUcycle(input, weight, OUrow, OUcol, lre_compressed_col, rws_compressed_
         totalA[i] = ax - ris_compressed_col[i]
         final += (totalW[i]*totalA[i])
     return final
+"""
 def write_matrix_activation_conv(input_matrix,fill_dimension,length,filename):
     #(27,1024*8=8192)
     #(144,1024*8=8192)
@@ -556,10 +558,6 @@ def stretch_input(input_matrix,window_size = 5,padding=(0,0),stride=(1,1)):
 
     #item_num = ((input_shape[2] + 2*padding[0] - window_size) / stride[0] + 1) * ((input_shape[3] + 2*padding[1] - window_size) / stride[1] + 1)
     item_num = int((input_shape[2] + 2*padding[0] - window_size) / stride[0] + 1) * int((input_shape[3] + 2*padding[1] - window_size) / stride[1] + 1)
-    print(input_shape[2])
-    print(input_shape[3])
-    print((input_shape[2] + 2*padding[0] - window_size) / stride[0] + 1)
-    print((input_shape[3] + 2*padding[1] - window_size) / stride[1] + 1)
     print('item_num = {}'.format(item_num))
     output_matrix = np.zeros((input_shape[0],int(item_num),input_shape[1]*window_size*window_size))
     iter = 0

@@ -292,105 +292,321 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 	*coreLatencyOther = 0;
 	
 	double subArrayReadLatency, subArrayReadDynamicEnergy, subArrayLeakage, subArrayLatencyADC, subArrayLatencyAccum, subArrayLatencyOther;
-
+	int OU_based = 1;
 	if (arrayDupRow*arrayDupCol > 1) {
 		// weight matrix is duplicated among subArray
 		if (arrayDupRow < numSubArrayRow || arrayDupCol < numSubArrayCol) {
-			// a couple of subArrays are mapped by the matrix
-			// need to redefine the data-grab start-point
+			cout<<"BBBB"<<endl;
+			cout<<"///////////////////////////////"<<endl;
+			cout<<"arrayDupRow "<<arrayDupRow<<endl;
+			cout<<"arrayDupCol "<<arrayDupCol<<endl;
+			cout<<"weightMatrixRow "<<weightMatrixRow<<endl;
+			cout<<"weightMatrixCol "<<weightMatrixCol<<endl;
+			cout<<"///////////////////////////////"<<endl;
+			if(OU_based){
+				int OUrownum, OUcolnum;
+				OUrownum = 8;
+				OUcolnum = 8;
+				vector<vector<double> > subArrayMemoryOU;
+				subArrayMemoryOU = CopySubArray(newMemory, 0, 0, OUrownum, OUcolnum);
+				vector<vector<double> > subArrayInputOU;
+				subArrayInputOU = CopySubInput(inputVector, 0, numInVector, OUrownum);
 
-			//int weightMatrixRow = min(desiredTileSizeCM, weightMatrixRow-i*desiredTileSizeCM);
-			//int weightMatrixCol = min(desiredTileSizeCM, weightMatrixCol-j*desiredTileSizeCM);
+				subArrayReadLatency = 0;
+				subArrayLatencyADC = 0;
+				subArrayLatencyAccum = 0;
+				subArrayLatencyOther = 0;
 
-			for (int i=0; i<ceil((double) weightMatrixRow/(double) param->numRowSubArray); i++) {
-				for (int j=0; j<ceil((double) weightMatrixCol/(double) param->numColSubArray); j++) {
-					cout<<"lllll"<<endl;
-					int numRowMatrix = min(param->numRowSubArray, weightMatrixRow-i*param->numRowSubArray);
-					int numColMatrix = min(param->numColSubArray, weightMatrixCol-j*param->numColSubArray);
-					// cout<<"weightMatrixRow: "<<weightMatrixRow<<" "<<weightMatrixCol<<endl;
-					// cout<<"numRowMatrix "<<numRowMatrix<<" "<<numColMatrix<<endl;
-					// cout<<"subArrayMem size: "<<newMemory.size()<<"  "<<newMemory[0].size()<<endl;
-					// cout<<"tt: "<<i*param->numRowSubArray<<" "<<j*param->numColSubArray<<endl;
-					if ((i*param->numRowSubArray < weightMatrixRow) && (j*param->numColSubArray < weightMatrixCol) && (i*param->numRowSubArray < weightMatrixRow) ) {
-						// assign weight and input to specific subArray
-						vector<vector<double> > subArrayMemory;
-						subArrayMemory = CopySubArray(newMemory, i*param->numRowSubArray, j*param->numColSubArray, numRowMatrix, numColMatrix);
-						vector<vector<double> > subArrayInput;
-						subArrayInput = CopySubInput(inputVector, i*param->numRowSubArray, numInVector, numRowMatrix);
-						subArrayReadLatency = 0;
-						subArrayLatencyADC = 0;
-						subArrayLatencyAccum = 0;
-						subArrayLatencyOther = 0;
+				for (int k=0; k<numInVector; k++) {                 // calculate single subArray through the total input vectors
+					double activityRowRead = 0;
+					vector<double> input;
+					input = GetInputVector(subArrayInputOU, k, &activityRowRead);
+					subArray->activityRowRead = activityRowRead;
+					int cellRange = pow(2, param->cellBit);
+					
+					if (param->parallelRead) {
+						subArray->levelOutput = param->levelOutput;               // # of levels of the multilevelSenseAmp output
+					} else {
+						subArray->levelOutput = cellRange;
+					}
+					
+					vector<double> columnResistance;
+					columnResistance = GetColumnResistance(input, subArrayMemoryOU, cell, param->parallelRead, subArray->resCellAccess);
+					
+					subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
+					if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
+						*clkPeriod = subArray->readLatency;					//clk freq is decided by the longest sensing latency
+					}
+					
+					if(!CalculateclkFreq){
+						subArray->CalculatePower(columnResistance);
+						*readDynamicEnergy += subArray->readDynamicEnergy;
+						subArrayLeakage = subArray->leakage;
+						
+						subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
+						subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
+						subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
+						subArrayLatencyOther += subArray->readLatencyOther;
+						
+						*coreEnergyADC += subArray->readDynamicEnergyADC;
+						*coreEnergyAccum += subArray->readDynamicEnergyAccum;
+						*coreEnergyOther += subArray->readDynamicEnergyOther;
+					}
+				}
+				
+				// do not pass adderTree 
+				*readLatency = subArrayReadLatency/(arrayDupRow*arrayDupCol);
+				*coreLatencyADC = subArrayLatencyADC/(arrayDupRow*arrayDupCol);
+				*coreLatencyAccum = subArrayLatencyAccum/(arrayDupRow*arrayDupCol);
+				*coreLatencyOther = subArrayLatencyOther/(arrayDupRow*arrayDupCol);
 
-						for (int k=0; k<numInVector; k++) {                 // calculate single subArray through the total input vectors
-							double activityRowRead = 0;
-							vector<double> input; 
-							input = GetInputVector(subArrayInput, k, &activityRowRead);
-							subArray->activityRowRead = activityRowRead;
+			}
+			else{
+				// a couple of subArrays are mapped by the matrix
+				// need to redefine the data-grab start-point
+				for (int i=0; i<ceil((double) weightMatrixRow/(double) param->numRowSubArray); i++) {
+					for (int j=0; j<ceil((double) weightMatrixCol/(double) param->numColSubArray); j++) {
+						int numRowMatrix = min(param->numRowSubArray, weightMatrixRow-i*param->numRowSubArray);
+						int numColMatrix = min(param->numColSubArray, weightMatrixCol-j*param->numColSubArray);
+						
+						if ((i*param->numRowSubArray < weightMatrixRow) && (j*param->numColSubArray < weightMatrixCol) && (i*param->numRowSubArray < weightMatrixRow) ) {
+							// assign weight and input to specific subArray
+							vector<vector<double> > subArrayMemory;
+							subArrayMemory = CopySubArray(newMemory, i*param->numRowSubArray, j*param->numColSubArray, numRowMatrix, numColMatrix);
+							vector<vector<double> > subArrayInput;
+							subArrayInput = CopySubInput(inputVector, i*param->numRowSubArray, numInVector, numRowMatrix);
 							
-							int cellRange = pow(2, param->cellBit);
-							if (param->parallelRead) {
-								subArray->levelOutput = param->levelOutput;               // # of levels of the multilevelSenseAmp output
-							} else {
-								subArray->levelOutput = cellRange;
-							}
-							
-							vector<double> columnResistance;
-							columnResistance = GetColumnResistance(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess);
-							
-							subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
-							if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
-								*clkPeriod = subArray->readLatency;					//clk freq is decided by the longest sensing latency
-							}							
-							
-							if(!CalculateclkFreq){
-								subArray->CalculatePower(columnResistance);
-								*readDynamicEnergy += subArray->readDynamicEnergy;
-								subArrayLeakage = subArray->leakage;
+							subArrayReadLatency = 0;
+							subArrayLatencyADC = 0;
+							subArrayLatencyAccum = 0;
+							subArrayLatencyOther = 0;
 
-								subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
-								subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
-								subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
-								subArrayLatencyOther += subArray->readLatencyOther;		
+							for (int k=0; k<numInVector; k++) {                 // calculate single subArray through the total input vectors
+								double activityRowRead = 0;
+								vector<double> input; 
+								input = GetInputVector(subArrayInput, k, &activityRowRead);
+								subArray->activityRowRead = activityRowRead;
 								
-								*coreEnergyADC += subArray->readDynamicEnergyADC;
-								*coreEnergyAccum += subArray->readDynamicEnergyAccum;
-								*coreEnergyOther += subArray->readDynamicEnergyOther;
+								int cellRange = pow(2, param->cellBit);
+								if (param->parallelRead) {
+									subArray->levelOutput = param->levelOutput;               // # of levels of the multilevelSenseAmp output
+								} else {
+									subArray->levelOutput = cellRange;
+								}
+								
+								vector<double> columnResistance;
+								columnResistance = GetColumnResistance(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess);
+								
+								subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
+								if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
+									*clkPeriod = subArray->readLatency;					//clk freq is decided by the longest sensing latency
+								}							
+								
+								if(!CalculateclkFreq){
+									subArray->CalculatePower(columnResistance);
+									*readDynamicEnergy += subArray->readDynamicEnergy;
+									subArrayLeakage = subArray->leakage;
+
+									subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
+									subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
+									subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
+									subArrayLatencyOther += subArray->readLatencyOther;		
+									
+									*coreEnergyADC += subArray->readDynamicEnergyADC;
+									*coreEnergyAccum += subArray->readDynamicEnergyAccum;
+									*coreEnergyOther += subArray->readDynamicEnergyOther;
+								}
 							}
-						}
-						if (NMpe) {
-							adderTreeNM->CalculateLatency((int)(numInVector/param->numBitInput)*ceil(param->numColMuxed/param->numColPerSynapse), ceil((double) weightMatrixRow/(double) param->numRowSubArray), 0);
-							adderTreeNM->CalculatePower((int)(numInVector/param->numBitInput)*ceil(param->numColMuxed/param->numColPerSynapse), ceil((double) weightMatrixRow/(double) param->numRowSubArray));
-							*readLatency = MAX(subArrayReadLatency + adderTreeNM->readLatency, (*readLatency));
-							*readDynamicEnergy += adderTreeNM->readDynamicEnergy;
-							*coreLatencyADC = MAX(subArrayLatencyADC, (*coreLatencyADC));
-							*coreLatencyAccum = MAX(subArrayLatencyAccum + adderTreeNM->readLatency, (*coreLatencyAccum));
-							*coreLatencyOther = MAX(subArrayLatencyOther, (*coreLatencyOther));
-							*coreEnergyAccum += adderTreeNM->readDynamicEnergy;
-						} else {
-							adderTreeCM->CalculateLatency((int)(numInVector/param->numBitInput)*ceil(param->numColMuxed/param->numColPerSynapse), ceil((double) weightMatrixRow/(double) param->numRowSubArray), 0);
-							adderTreeCM->CalculatePower((int)(numInVector/param->numBitInput)*ceil(param->numColMuxed/param->numColPerSynapse), ceil((double) weightMatrixRow/(double) param->numRowSubArray));
-							*readLatency = MAX(subArrayReadLatency + adderTreeCM->readLatency, (*readLatency));
-							*readDynamicEnergy += adderTreeCM->readDynamicEnergy;
-							*coreLatencyADC = MAX(subArrayLatencyADC, (*coreLatencyADC));
-							*coreLatencyAccum = MAX(subArrayLatencyAccum + adderTreeCM->readLatency, (*coreLatencyAccum));
-							*coreLatencyOther = MAX(subArrayLatencyOther, (*coreLatencyOther));
-							*coreEnergyAccum += adderTreeCM->readDynamicEnergy;
+							if (NMpe) {
+								adderTreeNM->CalculateLatency((int)(numInVector/param->numBitInput)*ceil(param->numColMuxed/param->numColPerSynapse), ceil((double) weightMatrixRow/(double) param->numRowSubArray), 0);
+								adderTreeNM->CalculatePower((int)(numInVector/param->numBitInput)*ceil(param->numColMuxed/param->numColPerSynapse), ceil((double) weightMatrixRow/(double) param->numRowSubArray));
+								*readLatency = MAX(subArrayReadLatency + adderTreeNM->readLatency, (*readLatency));
+								*readDynamicEnergy += adderTreeNM->readDynamicEnergy;
+								*coreLatencyADC = MAX(subArrayLatencyADC, (*coreLatencyADC));
+								*coreLatencyAccum = MAX(subArrayLatencyAccum + adderTreeNM->readLatency, (*coreLatencyAccum));
+								*coreLatencyOther = MAX(subArrayLatencyOther, (*coreLatencyOther));
+								*coreEnergyAccum += adderTreeNM->readDynamicEnergy;
+							} else {
+								adderTreeCM->CalculateLatency((int)(numInVector/param->numBitInput)*ceil(param->numColMuxed/param->numColPerSynapse), ceil((double) weightMatrixRow/(double) param->numRowSubArray), 0);
+								adderTreeCM->CalculatePower((int)(numInVector/param->numBitInput)*ceil(param->numColMuxed/param->numColPerSynapse), ceil((double) weightMatrixRow/(double) param->numRowSubArray));
+								*readLatency = MAX(subArrayReadLatency + adderTreeCM->readLatency, (*readLatency));
+								*readDynamicEnergy += adderTreeCM->readDynamicEnergy;
+								*coreLatencyADC = MAX(subArrayLatencyADC, (*coreLatencyADC));
+								*coreLatencyAccum = MAX(subArrayLatencyAccum + adderTreeCM->readLatency, (*coreLatencyAccum));
+								*coreLatencyOther = MAX(subArrayLatencyOther, (*coreLatencyOther));
+								*coreEnergyAccum += adderTreeCM->readDynamicEnergy;
+							}
 						}
 					}
 				}
+				// considering speedup, the latency of processing each layer is decreased
+				*readLatency = (*readLatency)/(arrayDupRow*arrayDupCol);
+				*coreLatencyADC = (*coreLatencyADC)/(arrayDupRow*arrayDupCol);
+				*coreLatencyAccum = (*coreLatencyAccum)/(arrayDupRow*arrayDupCol);
+				*coreLatencyOther = (*coreLatencyOther)/(arrayDupRow*arrayDupCol);	
 			}
-			// considering speedup, the latency of processing each layer is decreased
-			*readLatency = (*readLatency)/(arrayDupRow*arrayDupCol);
-			*coreLatencyADC = (*coreLatencyADC)/(arrayDupRow*arrayDupCol);
-			*coreLatencyAccum = (*coreLatencyAccum)/(arrayDupRow*arrayDupCol);
-			*coreLatencyOther = (*coreLatencyOther)/(arrayDupRow*arrayDupCol);
 		} else {
 			// assign weight and input to specific subArray
-			vector<vector<double> > subArrayMemory;
-			subArrayMemory = CopySubArray(newMemory, 0, 0, weightMatrixRow, weightMatrixCol);
-			vector<vector<double> > subArrayInput;
-			subArrayInput = CopySubInput(inputVector, 0, numInVector, weightMatrixRow);
+			//cout<<"CCCC"<<endl;
+			//Only one 8*8 OU
+			cout<<"///////////////////////////////"<<endl;
+			cout<<"arrayDupRow "<<arrayDupRow<<endl;
+			cout<<"arrayDupCol "<<arrayDupCol<<endl;
+			cout<<"weightMatrixRow "<<weightMatrixRow<<endl;
+			cout<<"weightMatrixCol "<<weightMatrixCol<<endl;
+			cout<<"///////////////////////////////"<<endl;
+			if(OU_based){
+				int OUrownum, OUcolnum;
+				OUrownum = 8;
+				OUcolnum = 8;
+				vector<vector<double> > subArrayMemoryOU;
+				subArrayMemoryOU = CopySubArray(newMemory, 0, 0, OUrownum, OUcolnum);
+				vector<vector<double> > subArrayInputOU;
+				subArrayInputOU = CopySubInput(inputVector, 0, numInVector, OUrownum);
+
+				subArrayReadLatency = 0;
+				subArrayLatencyADC = 0;
+				subArrayLatencyAccum = 0;
+				subArrayLatencyOther = 0;
+
+				for (int k=0; k<numInVector; k++) {                 // calculate single subArray through the total input vectors
+					double activityRowRead = 0;
+					vector<double> input;
+					input = GetInputVector(subArrayInputOU, k, &activityRowRead);
+					subArray->activityRowRead = activityRowRead;
+					int cellRange = pow(2, param->cellBit);
+					
+					if (param->parallelRead) {
+						subArray->levelOutput = param->levelOutput;               // # of levels of the multilevelSenseAmp output
+					} else {
+						subArray->levelOutput = cellRange;
+					}
+					
+					vector<double> columnResistance;
+					columnResistance = GetColumnResistance(input, subArrayMemoryOU, cell, param->parallelRead, subArray->resCellAccess);
+					
+					subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
+					if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
+						*clkPeriod = subArray->readLatency;					//clk freq is decided by the longest sensing latency
+					}
+					
+					if(!CalculateclkFreq){
+						subArray->CalculatePower(columnResistance);
+						*readDynamicEnergy += subArray->readDynamicEnergy;
+						subArrayLeakage = subArray->leakage;
+						
+						subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
+						subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
+						subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
+						subArrayLatencyOther += subArray->readLatencyOther;
+						
+						*coreEnergyADC += subArray->readDynamicEnergyADC;
+						*coreEnergyAccum += subArray->readDynamicEnergyAccum;
+						*coreEnergyOther += subArray->readDynamicEnergyOther;
+					}
+				}
+				
+				// do not pass adderTree 
+				*readLatency = subArrayReadLatency/(arrayDupRow*arrayDupCol);
+				*coreLatencyADC = subArrayLatencyADC/(arrayDupRow*arrayDupCol);
+				*coreLatencyAccum = subArrayLatencyAccum/(arrayDupRow*arrayDupCol);
+				*coreLatencyOther = subArrayLatencyOther/(arrayDupRow*arrayDupCol);
+
+			}
+			else{
+				vector<vector<double> > subArrayMemory;
+				subArrayMemory = CopySubArray(newMemory, 0, 0, weightMatrixRow, weightMatrixCol);
+				vector<vector<double> > subArrayInput;
+				subArrayInput = CopySubInput(inputVector, 0, numInVector, weightMatrixRow);
+
+				subArrayReadLatency = 0;
+				subArrayLatencyADC = 0;
+				subArrayLatencyAccum = 0;
+				subArrayLatencyOther = 0;
+
+				for (int k=0; k<numInVector; k++) {                 // calculate single subArray through the total input vectors
+					double activityRowRead = 0;
+					vector<double> input;
+					input = GetInputVector(subArrayInput, k, &activityRowRead);
+					subArray->activityRowRead = activityRowRead;
+					int cellRange = pow(2, param->cellBit);
+					
+					if (param->parallelRead) {
+						subArray->levelOutput = param->levelOutput;               // # of levels of the multilevelSenseAmp output
+					} else {
+						subArray->levelOutput = cellRange;
+					}
+					
+					vector<double> columnResistance;
+					columnResistance = GetColumnResistance(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess);
+					
+					subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
+					if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
+						*clkPeriod = subArray->readLatency;					//clk freq is decided by the longest sensing latency
+					}
+					
+					if(!CalculateclkFreq){
+						subArray->CalculatePower(columnResistance);
+						*readDynamicEnergy += subArray->readDynamicEnergy;
+						subArrayLeakage = subArray->leakage;
+						
+						subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
+						subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
+						subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
+						subArrayLatencyOther += subArray->readLatencyOther;
+						
+						*coreEnergyADC += subArray->readDynamicEnergyADC;
+						*coreEnergyAccum += subArray->readDynamicEnergyAccum;
+						*coreEnergyOther += subArray->readDynamicEnergyOther;
+					}
+				}
+				
+				// do not pass adderTree 
+				*readLatency = subArrayReadLatency/(arrayDupRow*arrayDupCol);
+				*coreLatencyADC = subArrayLatencyADC/(arrayDupRow*arrayDupCol);
+				*coreLatencyAccum = subArrayLatencyAccum/(arrayDupRow*arrayDupCol);
+				*coreLatencyOther = subArrayLatencyOther/(arrayDupRow*arrayDupCol);
+
+			}
+
+		}
+	} 
+	// else if(OU_based){
+	// 	//OU-based
+	// 	//Only one 8*8 OU
+	// 	int OUrownum, OUcolnum;
+	// 	OUrownum = 8;
+	// 	OUcolnum = 8;
+	// 	vector<vector<double> > subArrayMemoryOU;
+	// 	subArrayMemoryOU = CopySubArray(newMemory, 0, 0, OUrownum, OUcolnum);
+	// 	vector<vector<double> > subArrayInputOU;
+	// 	subArrayInputOU = CopySubInput(inputVector, 0, numInVector, numRowMatrix);
+	// }
+	else {
+		//cout<<"DDDD"<<endl;
+		//HERE
+		// weight matrix is further partitioned inside PE (among subArray) --> no duplicated
+		// cout<<"numSubArrayRow "<<numSubArrayRow<<endl;
+		// cout<<"numSubArrayCol "<<numSubArrayCol<<endl;
+		//numSubArrayRow*Col : 共需要幾個SubArray去儲存Weight
+		//OU-based
+		//Only one 8*8 OU
+		cout<<"NO dup"<<endl;
+		cout<<"///////////////////////////////"<<endl;
+		cout<<"arrayDupRow "<<arrayDupRow<<endl;
+		cout<<"arrayDupCol "<<arrayDupCol<<endl;
+		cout<<"weightMatrixRow "<<weightMatrixRow<<endl;
+		cout<<"weightMatrixCol "<<weightMatrixCol<<endl;
+		cout<<"///////////////////////////////"<<endl;
+
+		if(OU_based){
+			int OUrownum, OUcolnum;
+			OUrownum = 8;
+			OUcolnum = 8;
+			vector<vector<double> > subArrayMemoryOU;
+			subArrayMemoryOU = CopySubArray(newMemory, 0, 0, OUrownum, OUcolnum);
+			vector<vector<double> > subArrayInputOU;
+			subArrayInputOU = CopySubInput(inputVector, 0, numInVector, OUrownum);
 
 			subArrayReadLatency = 0;
 			subArrayLatencyADC = 0;
@@ -400,22 +616,18 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 			for (int k=0; k<numInVector; k++) {                 // calculate single subArray through the total input vectors
 				double activityRowRead = 0;
 				vector<double> input;
-				input = GetInputVector(subArrayInput, k, &activityRowRead);
+				input = GetInputVector(subArrayInputOU, k, &activityRowRead);
 				subArray->activityRowRead = activityRowRead;
 				int cellRange = pow(2, param->cellBit);
-				//cout<<"numInvector:  "<<numInVector<<endl;
 				
 				if (param->parallelRead) {
 					subArray->levelOutput = param->levelOutput;               // # of levels of the multilevelSenseAmp output
 				} else {
 					subArray->levelOutput = cellRange;
 				}
-				//試試看在這裡把weight切成OU-based
-
-				//input size:27, subArrayMemory.size()=27, newMemory.size()=27
-
+				
 				vector<double> columnResistance;
-				columnResistance = GetColumnResistance(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess);
+				columnResistance = GetColumnResistance(input, subArrayMemoryOU, cell, param->parallelRead, subArray->resCellAccess);
 				
 				subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
 				if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
@@ -443,121 +655,54 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 			*coreLatencyADC = subArrayLatencyADC/(arrayDupRow*arrayDupCol);
 			*coreLatencyAccum = subArrayLatencyAccum/(arrayDupRow*arrayDupCol);
 			*coreLatencyOther = subArrayLatencyOther/(arrayDupRow*arrayDupCol);
+
 		}
-	} else {
-		// weight matrix is further partitioned inside PE (among subArray) --> no duplicated
-		for (int i=0; i<numSubArrayRow/*ceil((double) weightMatrixRow/(double) param->numRowSubArray)*/; i++) {
-			for (int j=0; j<numSubArrayCol/*ceil((double) weightMatrixCol/(double) param->numColSubArray)*/; j++) {
-				if ((i*param->numRowSubArray < weightMatrixRow) && (j*param->numColSubArray < weightMatrixCol) && (i*param->numRowSubArray < weightMatrixRow) ) {
-					int numRowMatrix = min(param->numRowSubArray, weightMatrixRow-i*param->numRowSubArray);
-					int numColMatrix = min(param->numColSubArray, weightMatrixCol-j*param->numColSubArray);
-					// assign weight and input to specific subArray
-					vector<vector<double> > subArrayMemory;
-					subArrayMemory = CopySubArray(newMemory, i*param->numRowSubArray, j*param->numColSubArray, numRowMatrix, numColMatrix);
-					vector<vector<double> > subArrayInput;
-					subArrayInput = CopySubInput(inputVector, i*param->numRowSubArray, numInVector, numRowMatrix);
-					// cout<<"weightMatrixRow: "<<weightMatrixRow<<" "<<weightMatrixCol<<endl;
-					// cout<<"numRowMatrix "<<numRowMatrix<<" "<<numColMatrix<<endl;
-					// cout<<"subArrayMem size: "<<newMemory.size()<<"  "<<newMemory[0].size()<<endl;
-					// cout<<"tt: "<<i*param->numRowSubArray<<" "<<j*param->numColSubArray<<endl;
-					subArrayReadLatency = 0;
-					subArrayLatencyADC = 0;
-					subArrayLatencyAccum = 0;
-					subArrayLatencyOther = 0;
-					
-					int numOUcol = 4;
-					int numOUrow = 4;
-					for (int k=0; k<numInVector; k++) {                 // calculate single subArray through the total input vectors
-						double activityRowRead = 0;
-						vector<double> input;
-						input = GetInputVector(subArrayInput, k, &activityRowRead);
-						subArray->activityRowRead = activityRowRead;
+		else{
+			for (int i=0; i<numSubArrayRow/*ceil((double) weightMatrixRow/(double) param->numRowSubArray)*/; i++) {
+				for (int j=0; j<numSubArrayCol/*ceil((double) weightMatrixCol/(double) param->numColSubArray)*/; j++) {
+					if ((i*param->numRowSubArray < weightMatrixRow) && (j*param->numColSubArray < weightMatrixCol) && (i*param->numRowSubArray < weightMatrixRow) ) {
+						int numRowMatrix = min(param->numRowSubArray, weightMatrixRow-i*param->numRowSubArray);
+						int numColMatrix = min(param->numColSubArray, weightMatrixCol-j*param->numColSubArray);
+						// assign weight and input to specific subArray
+
+						////////////////////////////Some Formula////////////////////////////
+						//numInVector = (netStructure[l][0]-netStructure[l][3]+1)/netStructure[l][7]*(netStructure[l][1]-netStructure[l][4]+1)/netStructure[l][7];
+						//weightMatrixRow = netStructure[l][2]*netStructure[l][3]*netStructure[l][4]*numRowPerSynapse; K*K*D
+						//weightMatrixCol = netStructure[l][5]*numColPerSynapse; N
+
+						//cellBit =1 => numRowPerSynapse=1, numColPerSynapse=8
+						//cellBit =2 => numRowPerSynapse=1, numColPerSynapse=4
+						////////////////////////////////////////////////////////////////////
+						//CM good at energy cost; NM good at latency//
+						cout<<"weightMatrixRow "<<weightMatrixRow<<endl;
+						cout<<"weightMatrixCol "<<weightMatrixCol<<endl;
+						cout<<"numRowMatrix: "<<numRowMatrix<<endl;
+						cout<<"numColMatrix: "<<numColMatrix<<endl;
+						numRowMatrix = 8;
+						numColMatrix = 8;
+						vector<vector<double> > subArrayMemory;
+						subArrayMemory = CopySubArray(newMemory, i*param->numRowSubArray, j*param->numColSubArray, numRowMatrix, numColMatrix);
+						vector<vector<double> > subArrayInput;
+						subArrayInput = CopySubInput(inputVector, i*param->numRowSubArray, numInVector, numRowMatrix);
 						
-						int cellRange = pow(2, param->cellBit);
-						if (param->parallelRead) {
-							subArray->levelOutput = param->levelOutput;               // # of levels of the multilevelSenseAmp output
-						} else {
-							subArray->levelOutput = cellRange;
-						}
-						double maxLatency = 0;
-
-						bool OU_based = true;
-						bool OU_based_2 = false;
-						if(OU_based){
-							for(int m=0; m<floor((double) numColMatrix/ (double) numOUcol)-1; m++){
-								for(int n=0; n<floor((double) numRowMatrix/ (double) numOUrow)-1; n++){
-									vector<double> columnResistance;
-									columnResistance = GetColumnResistanceM(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess, m, n);
-									subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
-									if(maxLatency< subArray->readLatency){
-										maxLatency = subArray->readLatency;
-									}
-									//CalculateclkFreq = false;
-									if(!CalculateclkFreq){
-										subArray->CalculatePower(columnResistance);
-										*readDynamicEnergy += subArray->readDynamicEnergy;
-										subArrayLeakage = subArray->leakage;
-										
-										subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
-										subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
-										subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
-										subArrayLatencyOther += subArray->readLatencyOther;
-										
-										*coreEnergyADC += subArray->readDynamicEnergyADC;
-										*coreEnergyAccum += subArray->readDynamicEnergyAccum;
-										*coreEnergyOther += subArray->readDynamicEnergyOther;
-									}
-
-
-								}
+						subArrayReadLatency = 0;
+						subArrayLatencyADC = 0;
+						subArrayLatencyAccum = 0;
+						subArrayLatencyOther = 0;
+						
+						for (int k=0; k<numInVector; k++) {                 // calculate single subArray through the total input vectors
+							double activityRowRead = 0;
+							vector<double> input;
+							input = GetInputVector(subArrayInput, k, &activityRowRead);
+							subArray->activityRowRead = activityRowRead;
+							
+							int cellRange = pow(2, param->cellBit);
+							if (param->parallelRead) {
+								subArray->levelOutput = param->levelOutput;               // # of levels of the multilevelSenseAmp output
+							} else {
+								subArray->levelOutput = cellRange;
 							}
-							if(CalculateclkFreq){
-								*clkPeriod = maxLatency;					//clk freq is decided by the longest sensing latency
-							}
-						}
-						else if(OU_based_2){
-							//cout<<"test::"<<endl;
-							//cout<<floor((double) numColMatrix/ (double) numOUcol)<<endl;
-							//cout<<floor((double) numRowMatrix/ (double) numOUrow)<<endl;
-							for(int m=0; m<floor((double) numColMatrix/ (double) numOUcol)-1; m++){
-								for(int n=0; n<floor((double) numRowMatrix/ (double) numOUrow)-1; n++){
-									vector<vector<double> > subArrayMemoryM;
-									vector<vector<double> > subArrayInputM;
-									subArrayMemoryM=CopySubArray(newMemory, n*numOUrow, m*numOUcol, numOUrow, numOUcol);
-									subArrayInputM =CopySubInput(inputVector, n*numOUrow, numInVector, numOUrow);
-									vector<double> inputM;
-									inputM=GetInputVector(subArrayInputM, k, &activityRowRead);
-									vector<double> columnResistance;
-									//columnResistance = GetColumnResistanceM(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess, m, n);
-									columnResistance = GetColumnResistance(inputM, subArrayMemoryM, cell, param->parallelRead, subArray->resCellAccess);
-									subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
-									if(maxLatency< subArray->readLatency){
-										maxLatency = subArray->readLatency;
-									}
-									//CalculateclkFreq = false;
-									if(!CalculateclkFreq){
-										subArray->CalculatePower(columnResistance);
-										*readDynamicEnergy += subArray->readDynamicEnergy;
-										subArrayLeakage = subArray->leakage;
-										
-										subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
-										subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
-										subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
-										subArrayLatencyOther += subArray->readLatencyOther;
-										
-										*coreEnergyADC += subArray->readDynamicEnergyADC;
-										*coreEnergyAccum += subArray->readDynamicEnergyAccum;
-										*coreEnergyOther += subArray->readDynamicEnergyOther;
-									}
-
-								}
-							}
-							if(CalculateclkFreq){
-								*clkPeriod = maxLatency;					//clk freq is decided by the longest sensing latency
-							}
-
-						}
-						else{
+							
 							vector<double> columnResistance;
 							columnResistance = GetColumnResistance(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess);
 
@@ -565,6 +710,7 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 							if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
 								*clkPeriod = subArray->readLatency;					//clk freq is decided by the longest sensing latency
 							}
+							
 							if(!CalculateclkFreq){
 								subArray->CalculatePower(columnResistance);
 								*readDynamicEnergy += subArray->readDynamicEnergy;
@@ -579,44 +725,17 @@ double ProcessingUnitCalculatePerformance(SubArray *subArray, const vector<vecto
 								*coreEnergyAccum += subArray->readDynamicEnergyAccum;
 								*coreEnergyOther += subArray->readDynamicEnergyOther;
 							}
-
 						}
-
-
-						// vector<double> columnResistance;
-						// columnResistance = GetColumnResistance(input, subArrayMemory, cell, param->parallelRead, subArray->resCellAccess);
-
-						//subArray->CalculateLatency(1e20, columnResistance, CalculateclkFreq);
-						// if(CalculateclkFreq && (*clkPeriod < subArray->readLatency)){
-						// 	*clkPeriod = subArray->readLatency;					//clk freq is decided by the longest sensing latency
-						// }
-						// if(CalculateclkFreq){
-						// 	*clkPeriod = maxLatency;					//clk freq is decided by the longest sensing latency
-						// }
-						
-						// if(!CalculateclkFreq){
-						// 	subArray->CalculatePower(columnResistance);
-						// 	*readDynamicEnergy += subArray->readDynamicEnergy;
-						// 	subArrayLeakage = subArray->leakage;
-							
-						// 	subArrayLatencyADC += subArray->readLatencyADC;			//sensing cycle
-						// 	subArrayLatencyAccum += subArray->readLatencyAccum;		//#cycles
-						// 	subArrayReadLatency += subArray->readLatency;		//#cycles + sensing cycle
-						// 	subArrayLatencyOther += subArray->readLatencyOther;
-							
-						// 	*coreEnergyADC += subArray->readDynamicEnergyADC;
-						// 	*coreEnergyAccum += subArray->readDynamicEnergyAccum;
-						// 	*coreEnergyOther += subArray->readDynamicEnergyOther;
-						// }
+						*readLatency = MAX(subArrayReadLatency, (*readLatency));
+						*coreLatencyADC = MAX(subArrayLatencyADC, (*coreLatencyADC));
+						*coreLatencyAccum = MAX(subArrayLatencyAccum, (*coreLatencyAccum));
+						*coreLatencyOther = MAX(subArrayLatencyOther, (*coreLatencyOther));
 					}
-					*readLatency = MAX(subArrayReadLatency, (*readLatency));
-					*coreLatencyADC = MAX(subArrayLatencyADC, (*coreLatencyADC));
-					*coreLatencyAccum = MAX(subArrayLatencyAccum, (*coreLatencyAccum));
-					*coreLatencyOther = MAX(subArrayLatencyOther, (*coreLatencyOther));
 				}
 			}
 		}
 		if (NMpe) {
+			//HERE
 			adderTreeNM->CalculateLatency((int)(numInVector/param->numBitInput)*ceil(param->numColMuxed/param->numColPerSynapse), ceil((double) weightMatrixRow/(double) param->numRowSubArray), 0);
 			adderTreeNM->CalculatePower((int)(numInVector/param->numBitInput)*ceil(param->numColMuxed/param->numColPerSynapse), ceil((double) weightMatrixRow/(double) param->numRowSubArray));
 			*readLatency += adderTreeNM->readLatency;
@@ -739,10 +858,8 @@ vector<double> GetInputVector(const vector<vector<double> > &input, int numInput
 			numofreadrow += 0;
 		}
 	}
-	//double totalnumRow = 4;
 	double totalnumRow = input.size();
 	*(activityRowRead) = numofreadrow/totalnumRow;
-	//cout<<"activityRowRead: "<<*(activityRowRead)<<endl;
 	return copy;
 	copy.clear();
 } 
@@ -811,68 +928,6 @@ vector<double> GetColumnResistance(const vector<double> &input, const vector<vec
 	resistance.clear();
 } 
 
-vector<double> GetColumnResistanceM(const vector<double> &input, const vector<vector<double> > &weight, MemCell& cell, bool parallelRead, double resCellAccess, double OUcol, double OUrow) {
-	vector<double> resistance;
-	vector<double> conductance;
-	double columnG = 0; 
-	
-	for (int j=4*OUcol; j<min(4*(OUcol+1), (double) weight[0].size()); j++) {
-		int activatedRow = 0;
-		columnG = 0;
-		for (int i=4*OUrow; i<min(4*(OUrow+1), (double) weight.size()); i++) {
-			if (cell.memCellType == Type::RRAM) {	// eNVM
-				double totalWireResistance;
-				if (cell.accessType == CMOS_access) {
-					totalWireResistance = (double) 1.0/weight[i][j] + (j + 1) * param->wireResistanceRow + (weight.size() - i) * param->wireResistanceCol + cell.resistanceAccess;
-				} else {
-					totalWireResistance = (double) 1.0/weight[i][j] + (j + 1) * param->wireResistanceRow + (weight.size() - i) * param->wireResistanceCol;
-				}
-				if ((int) input[i] == 1) {
-					columnG += (double) 1.0/totalWireResistance;
-					activatedRow += 1 ;
-				} else {
-					columnG += 0;
-				}
-			} else if (cell.memCellType == Type::FeFET) {
-				double totalWireResistance;
-				totalWireResistance = (double) 1.0/weight[i][j] + (j + 1) * param->wireResistanceRow + (weight.size() - i) * param->wireResistanceCol;
-				if ((int) input[i] == 1) {
-					columnG += (double) 1.0/totalWireResistance;
-					activatedRow += 1 ;
-				} else {
-					columnG += 0;
-				}
-				
-			} else if (cell.memCellType == Type::SRAM) {	
-				// SRAM: weight value do not affect sense energy --> read energy calculated in subArray.cpp (based on wireRes wireCap etc)
-				double totalWireResistance = (double) (resCellAccess + param->wireResistanceCol);
-				if ((int) input[i] == 1) {
-					columnG += (double) 1.0/totalWireResistance;
-					activatedRow += 1 ;
-				} else {
-					columnG += 0;
-				}
-			}
-		}
-		
-		if (cell.memCellType == Type::RRAM || cell.memCellType == Type::FeFET) {
-			if (!parallelRead) {  
-				conductance.push_back((double) columnG/activatedRow);
-			} else {
-				conductance.push_back(columnG);
-			}
-		} else {
-			conductance.push_back(columnG);
-		}
-	}
-	// covert conductance to resistance
-	for (int i=4*OUcol; i<min(4*(OUcol+1), (double) weight[0].size()); i++) {
-		resistance.push_back((double) 1.0/conductance[i]);
-	}
-		
-	return resistance;
-	resistance.clear();
-} 
 
 
 
